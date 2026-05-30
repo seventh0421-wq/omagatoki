@@ -70,6 +70,18 @@
   .chip:hover{border-color:var(--amber-soft);color:var(--moon);}
   .chip.on{border-color:var(--amber-glow);color:var(--amber-glow);background:rgba(196,97,42,.12);box-shadow:0 0 20px rgba(232,168,92,.15);}
   .chip.on small{color:var(--amber-soft);}
+  .nom-row{display:flex;gap:.7rem;flex-wrap:wrap;}
+  .nom-row select{flex:1;min-width:140px;}
+  .nom-cost{margin-top:.9rem;text-align:right;font-size:.9rem;color:var(--moon-dim);letter-spacing:.08em;}
+  .nom-cost span{font-family:var(--brush);font-size:1.25rem;color:var(--amber-glow);letter-spacing:.05em;margin-left:.4rem;text-shadow:0 0 16px rgba(232,168,92,.25);}
+  .desc .glitch{position:relative;display:inline-block;color:var(--amber-soft);animation:gl-flick 3.6s infinite steps(1);}
+  .desc .glitch::before,.desc .glitch::after{content:attr(data-text);position:absolute;left:0;top:0;width:100%;overflow:hidden;opacity:.7;pointer-events:none;}
+  .desc .glitch::before{color:#c23b2c;clip-path:inset(0 0 55% 0);animation:gl-shift 2.4s infinite steps(2);}
+  .desc .glitch::after{color:#6aa6ad;clip-path:inset(55% 0 0 0);animation:gl-shift2 3.1s infinite steps(2);}
+  @keyframes gl-flick{0%,90%,100%{opacity:1;}91%{opacity:.25;}93%{opacity:1;}95%{opacity:.55;}96%{opacity:1;}}
+  @keyframes gl-shift{0%,100%{transform:translate(-1px,0);}50%{transform:translate(1px,-1px);}}
+  @keyframes gl-shift2{0%,100%{transform:translate(1px,0);}50%{transform:translate(-1px,1px);}}
+  .desc .glitch-tail{display:inline-block;color:#c23b2c;letter-spacing:.08em;min-width:2.6em;font-family:monospace;opacity:.85;text-shadow:0 0 6px rgba(194,59,44,.5);}
 
   .submit{width:100%;margin-top:1rem;font-family:var(--brush);font-size:1.4rem;letter-spacing:.3em;
     color:var(--moon);background:rgba(10,11,16,.6);border:1px solid rgba(232,168,92,.45);
@@ -152,14 +164,31 @@
     </div>
 
     <div class="field">
-      <label>謎題給你的指引<span class="req">可留白</span></label>
-      <div class="desc">可以把解謎結尾推薦的「餐點與店員」貼在這裡；<br>也可以自己指定想要的店員，或整欄留白，交給我們安排。</div>
-      <input type="text" id="rec" placeholder="例：夜啼き / 一目小僧（或自行填寫）">
+      <label>指名服務<span class="req">可留白</span></label>
+      <div class="desc">想指名哪位妖怪今晚陪你？要幾節？<br>一節約 15 分鐘 ／ 100,000 GIL，一人一夜至多兩節。未指定可留白，交由閻羅安排。</div>
+      <div class="nom-row">
+        <select id="nomStaff">
+          <option value="">不指定（交給閻羅安排）</option>
+          <option value="轆轤首">轆轤首</option>
+          <option value="雪女">雪女</option>
+          <option value="一目小僧">一目小僧</option>
+          <option value="河童">河童</option>
+          <option value="影女">影女</option>
+          <option value="八尺大人">八尺大人</option>
+          <option value="狐妖">狐妖</option>
+        </select>
+        <select id="nomSessions">
+          <option value="0">節數（未定）</option>
+          <option value="1">一節</option>
+          <option value="2">兩節</option>
+        </select>
+      </div>
+      <div class="nom-cost" id="nomCost">預估指名費用　<span id="nomCostVal">0 GIL</span></div>
     </div>
 
     <div class="field">
       <label>內緒話<span class="req">可留白</span></label>
-      <div class="desc">寫一件關於你角色的事──一個秘密、一個執念、一個怕的東西，或任何你希望被聊到的。<br>我們會用它，讓今晚的對話更像為你而開。（自願填寫）</div>
+      <div class="desc">或許你想跟妖怪說──一個秘密、一個執念、一個你懼怕的東西，或任何你希望<span class="glitch" aria-hidden="true" data-text="被聽見的">被聽見的</span><span class="glitch-tail" aria-hidden="true"></span>。</div>
       <textarea id="topic" placeholder="例：我角色總說自己天不怕地不怕，其實很怕黑。"></textarea>
     </div>
 
@@ -196,6 +225,14 @@ document.querySelectorAll('.chips').forEach(group=>{
   });
 });
 
+const PRICE_PER_SESSION = 100000;
+const nomSessions = document.getElementById('nomSessions');
+const nomCostVal = document.getElementById('nomCostVal');
+function gilFmt(n){ return n.toLocaleString('en-US') + ' GIL'; }
+function updateNomCost(){ const s = parseInt(nomSessions.value||'0',10); nomCostVal.textContent = gilFmt(s*PRICE_PER_SESSION); }
+nomSessions.addEventListener('change', updateNomCost);
+updateNomCost();
+
 const norm = s => (s||"").trim().toLowerCase().replace(/[\s・·]/g,'');
 
 document.getElementById('submitBtn').onclick = async ()=>{
@@ -210,11 +247,14 @@ document.getElementById('submitBtn').onclick = async ()=>{
   if(norm(pass) !== norm(MONTH_PASS)){ err.textContent = "這不是今晚的密語。門，沒有開。"; return; }
   err.textContent = "";
 
+  const sess = parseInt(document.getElementById('nomSessions').value||'0',10);
   const data = {
     charName, contact,
     party: val('party'),
     seat: picks.seat || "（未選）",
-    rec: val('rec') || "（無）",
+    nomStaff: document.getElementById('nomStaff').value || "（不指定）",
+    nomSessions: sess,
+    nomCost: sess * PRICE_PER_SESSION,
     topic: val('topic') || "（未填）"
   };
 
@@ -235,7 +275,9 @@ document.getElementById('submitBtn').onclick = async ()=>{
             { name:"聯絡方式", value:data.contact, inline:true },
             { name:"人數", value:data.party, inline:true },
             { name:"想要的席", value:data.seat, inline:true },
-            { name:"🍶 指引（餐點/店員）", value:data.rec, inline:false },
+            { name:"指名", value:data.nomStaff, inline:true },
+            { name:"節數", value:(data.nomSessions ? data.nomSessions+" 節" : "（未定）"), inline:true },
+            { name:"預估指名費", value:data.nomCost.toLocaleString("en-US")+" GIL", inline:true },
             { name:"💬 內緒話（給店員接待用）", value:data.topic, inline:false }
           ],
           footer:{ text:"逢魔 ── おうまがとき" },
@@ -271,6 +313,19 @@ function showReply(isDemo, data){
   `;
   window.scrollTo({top:0, behavior:'smooth'});
 }
+</script>
+<script>
+(function(){
+  var tail = document.querySelector('.desc .glitch-tail');
+  if(!tail) return;
+  var pool = '\u2593\u2592\u2591\u2588\u259a\u259e\u2573\u3007\u00d7\u30ce\u30e1\uFE4F\u25c7\u25c6\u30f0\u30f1\u3090\u3091';
+  setInterval(function(){
+    var n = 2 + Math.floor(Math.random()*3);
+    var s = '';
+    for(var i=0;i<n;i++) s += pool.charAt(Math.floor(Math.random()*pool.length));
+    tail.textContent = s;
+  }, 120);
+})();
 </script>
 </body>
 </html>

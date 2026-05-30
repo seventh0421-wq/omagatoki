@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>饗應 ── 逢魔</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Yuji+Syuku&family=Shippori+Mincho+B1:wght@400;500;600;700&family=Klee+One:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --night:#0a0b10; --amber:#c4612a; --amber-soft:#d98b4a; --amber-glow:#e8a85c;
+    --blood:#7a2018; --moon:#e8e3d6; --moon-dim:#9a9488; --paper:#d8cdb4;
+    --brush:'Yuji Syuku', serif; --mincho:'Shippori Mincho B1', serif; --hand:'Klee One', serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    background:
+      radial-gradient(ellipse 60% 45% at 50% 110%, rgba(196,97,42,.16), transparent 60%),
+      radial-gradient(ellipse 50% 40% at 50% -8%, rgba(122,32,24,.14), transparent 60%),
+      linear-gradient(180deg,#07080c,#0c0d13 60%,#100e0d);
+    background-attachment:fixed; color:var(--moon); font-family:var(--mincho);
+    line-height:1.9; letter-spacing:.04em; min-height:100vh;
+  }
+  body::before{content:"";position:fixed;inset:0;z-index:99;pointer-events:none;opacity:.05;mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+  body::after{content:"";position:fixed;inset:0;z-index:98;pointer-events:none;
+    background:radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,.5) 100%);}
+  ::selection{background:var(--blood);color:var(--moon);}
+
+  nav.bar{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;
+    padding:1rem 2rem;background:linear-gradient(180deg, rgba(7,8,12,.92), rgba(7,8,12,0));backdrop-filter:blur(4px);}
+  nav.bar .home{font-family:var(--brush);font-size:1.9rem;color:var(--moon);text-decoration:none;letter-spacing:.15em;text-shadow:0 0 18px rgba(232,168,92,.3);transition:.4s;}
+  nav.bar .home:hover{color:var(--amber-glow);}
+  nav.bar .links{display:flex;gap:1.6rem;flex-wrap:wrap;}
+  nav.bar .links a{font-family:var(--brush);font-size:1.05rem;color:var(--moon-dim);text-decoration:none;letter-spacing:.16em;position:relative;transition:.4s;padding-bottom:.2rem;}
+  nav.bar .links a::after{content:"";position:absolute;left:0;bottom:-2px;width:0;height:1px;background:var(--amber-glow);transition:.4s;}
+  nav.bar .links a:hover{color:var(--moon);} nav.bar .links a:hover::after{width:100%;}
+  nav.bar .links a.cur{color:var(--amber-glow);}
+  nav.bar .toggle{display:none;background:none;border:none;color:var(--moon);font-family:var(--brush);font-size:1.3rem;cursor:pointer;letter-spacing:.1em;}
+
+  .page{max-width:840px;margin:0 auto;padding:8rem 1.5rem 6rem;}
+  .head{text-align:center;margin-bottom:1rem;}
+  .head .mark{font-family:var(--brush);font-size:clamp(2.6rem,8vw,4.5rem);color:var(--moon);letter-spacing:.2em;text-shadow:0 0 28px rgba(232,168,92,.2);}
+  .head .en{font-size:.72rem;letter-spacing:.5em;color:var(--amber);text-transform:uppercase;margin-top:.8rem;}
+  .lead{text-align:center;color:var(--moon-dim);font-size:15px;line-height:2.2;margin:2.4rem auto 3rem;max-width:560px;}
+  .lead .em{color:var(--amber-soft);}
+
+  .plan-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.6rem;max-width:680px;margin:0 auto;}
+  .plan{border:1px solid rgba(216,205,180,.14);background:linear-gradient(165deg, rgba(20,14,9,.55), rgba(13,14,20,.6));padding:2.4rem 1.8rem;text-align:center;position:relative;transition:.5s cubic-bezier(.16,1,.3,1);}
+  .plan:hover{border-color:rgba(232,168,92,.45);box-shadow:0 0 34px rgba(196,97,42,.16);transform:translateY(-4px);}
+  .plan .pn{font-family:var(--brush);font-size:2rem;color:var(--amber-glow);letter-spacing:.2em;}
+  .plan .pt{font-size:.66rem;letter-spacing:.4em;color:var(--moon-dim);text-transform:uppercase;margin:.5rem 0 1.5rem;}
+  .plan .time{font-size:.95rem;color:var(--moon-dim);letter-spacing:.08em;}
+  .plan .price{font-family:var(--brush);font-size:1.85rem;color:var(--moon);margin:.5rem 0;letter-spacing:.04em;}
+  .plan .price small{font-size:.66rem;color:var(--amber);letter-spacing:.2em;margin-left:.35rem;}
+  .plan .inc{font-size:.85rem;color:var(--moon-dim);line-height:1.9;margin-top:1.1rem;border-top:1px dotted rgba(216,205,180,.14);padding-top:1.1rem;}
+  .plan .cap{position:absolute;top:.9rem;right:.9rem;font-size:.6rem;letter-spacing:.12em;color:#c23b2c;border:1px solid #c23b2c;padding:.2rem .5rem;}
+
+  .svc-note{max-width:600px;margin:3rem auto 0;text-align:center;color:var(--moon-dim);font-size:14px;line-height:2.1;}
+  .svc-note .em{color:var(--moon);}
+
+  .divider{width:1px;height:60px;margin:3.5rem auto;background:linear-gradient(180deg,transparent,rgba(232,168,92,.4),transparent);}
+
+  .care{max-width:640px;margin:0 auto;}
+  .care h3{font-family:var(--brush);font-size:1.6rem;color:var(--amber-soft);letter-spacing:.18em;text-align:center;margin-bottom:1.8rem;}
+  .care-item{display:flex;gap:1.1rem;align-items:flex-start;padding:.85rem 0;border-bottom:1px dotted rgba(216,205,180,.1);}
+  .care-item .ln{font-family:var(--brush);font-size:1.15rem;color:var(--amber);flex-shrink:0;width:1.5em;line-height:1.7;}
+  .care-item p{font-size:15px;color:var(--moon);line-height:1.95;margin:0;}
+  .care-item p em{color:var(--amber-soft);font-style:normal;}
+
+  .back{text-align:center;margin-top:3.5rem;}
+  .back a{font-family:var(--brush);font-size:1.05rem;letter-spacing:.18em;color:var(--moon-dim);text-decoration:none;border:1px solid rgba(216,205,180,.2);padding:.8rem 1.8rem;display:inline-block;transition:.5s;}
+  .back a:hover{color:var(--amber-glow);border-color:var(--amber-glow);box-shadow:0 0 22px rgba(232,168,92,.15);}
+
+  @media(max-width:760px){
+    nav.bar{padding:.9rem 1.3rem;} nav.bar .toggle{display:block;}
+    nav.bar .links{position:absolute;top:100%;right:1.3rem;flex-direction:column;gap:1.1rem;background:rgba(8,9,13,.97);border:1px solid rgba(216,205,180,.12);padding:1.4rem 2rem;display:none;align-items:flex-end;}
+    nav.bar .links.open{display:flex;}
+    .plan-grid{grid-template-columns:1fr;max-width:340px;}
+  }
+</style>
+</head>
+<body>
+
+<nav class="bar">
+  <a href="index.html" class="home">逢魔</a>
+  <button class="toggle" onclick="document.querySelector('.links').classList.toggle('open')">≡ 品書</button>
+  <div class="links">
+    <a href="seats.html">三席</a>
+    <a href="menu.html">食單</a>
+    <a href="staff.html">奉公人</a>
+    <a href="service.html" class="cur">饗應</a>
+    <a href="rules.html">作法</a>
+    <a href="ema.html">繪馬牆</a>
+    <a href="door.html">推開門</a>
+  </div>
+</nav>
+
+<div class="page">
+  <div class="head">
+    <div class="mark">饗應</div>
+    <div class="en">Service</div>
+  </div>
+
+  <p class="lead">
+    想讓某位妖怪，今夜只看著你？<br>
+    那麼，付出<span class="em">相應的代價</span>──向接待道出那個名字。<br>
+    被指名的妖怪，將只為你一人，斟酒、說話、陪你度過這一節黃昏。
+  </p>
+
+  <div class="plan-grid">
+    <div class="plan">
+      <div class="pn">一節</div>
+      <div class="pt">One session</div>
+      <div class="time">約 15 分鐘</div>
+      <div class="price">100,000<small>GIL</small></div>
+      <div class="inc">妖怪專屬的陪伴<br>（特殊待客之道，依各妖怪而異）</div>
+    </div>
+    <div class="plan">
+      <div class="cap">一人上限</div>
+      <div class="pn">兩節</div>
+      <div class="pt">Two sessions</div>
+      <div class="time">約 30 分鐘</div>
+      <div class="price">200,000<small>GIL</small></div>
+      <div class="inc">同上，延長一節<br>一人一夜至多兩節</div>
+    </div>
+  </div>
+
+  <p class="svc-note">
+    每一節的基本，是<span class="em">專屬於你的陪伴</span>。<br>
+    至於更深的待客之道，每位妖怪各有各的規矩與手段──<br>
+    那些，請在指名時，親自向他探問。
+  </p>
+
+  <div class="divider"></div>
+
+  <div class="care">
+    <h3>指名之約</h3>
+    <div class="care-item"><span class="ln">一</span><p>確認預約後，請直接與你預約的妖怪組隊，並交易指名費用。若這一節讓你滿意，<em>可自行奉上小費</em>。</p></div>
+    <div class="care-item"><span class="ln">二</span><p>一名妖怪，最多同時服侍兩位客人。</p></div>
+    <div class="care-item"><span class="ln">三</span><p>一人一夜，至多預約兩節——<em>為免叨擾妖怪過甚，也為你，留住餘韻</em>。</p></div>
+  </div>
+
+  <div class="back">
+    <a href="staff.html">先去看看今夜的妖怪　→</a>
+  </div>
+</div>
+
+</body>
+</html>
