@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>作法 ── 逢魔</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+  /* 作法頁：標題區精簡，氛圍句移到各節標題行右側 */
+  .page{padding-top:6.5rem;padding-bottom:4rem;}
+  .page-head{margin-bottom:2.2rem;}
+  .page-head .page-mark{font-size:clamp(2rem,6vw,3rem);}
+  .page-head .page-lead{margin-top:.9rem;font-size:.92rem;}
+  .law-sec h3{flex-wrap:wrap;}
+  .law-sec h3 .head-aside{margin-left:auto;align-self:flex-end;font-family:var(--mincho);font-weight:normal;font-style:italic;font-size:13px;color:var(--moon-dim);letter-spacing:.04em;}
+  @media(max-width:560px){ .law-sec h3 .head-aside{margin-left:0;flex-basis:100%;text-align:right;} }
+</style>
+</head>
+<body>
+<nav class="bar">
+  <a href="index.html" class="home">逢魔</a>
+  <button class="toggle" onclick="document.querySelector('.links').classList.toggle('open')">≡ 品書</button>
+  <div class="links">
+    <a href="seats.html">三席</a>
+    <a href="menu.html">食單</a>
+    <a href="staff.html">奉公人</a>
+    <a href="rules.html">作法</a>
+    <a href="ema.html">繪馬牆</a>
+    <a href="door.html">推開門</a>
+  </div>
+</nav>
+<main class="page">
+<div class="lantern" style="top:14%;right:8%;width:160px;height:200px;opacity:.4;"></div>
+
+<div class="wrap">
+  <div class="page-head reveal">
+    <div class="page-mark">作　法</div>
+    <span class="page-en">House rules</span>
+    <p class="page-lead">推開這扇門，你便是今晚的客。<br>客，有客的規矩——讀過了，再入座。</p>
+  </div>
+  <div class="law-sec reveal">
+    <h3>入店之禮 <span class="en">Etiquette</span><span class="head-aside">推開這扇門，便是客。客，有客的樣子。</span></h3>
+    <div class="law-item"><span class="ln">一</span><p>此處不容 ERP、政治，以及任何違反遊戲規定之事——逾矩者，門不為你而開。</p></div>
+    <div class="law-item"><span class="ln">二</span><p>請以禮待人，敬重同席的客與服侍的妖怪。若有失禮之舉，本店有權請你離席，並將你的名字，自此劃入<em>不再開門的名冊</em>。</p></div>
+    <div class="law-item"><span class="ln">三</span><p>入店請收起武器與寵物，並切換為走路模式——以免驚擾了同席的客，與那些「非客」。</p></div>
+    <div class="law-item"><span class="ln">四</span><p>請勿打探妖怪與其他客的來歷。非營業的時辰，是妖怪自己的時光，還請保持禮貌的距離，尊重其意願。</p></div>
+    <div class="law-item"><span class="ln">五</span><p>營業之中，需經店員首肯方可攝影，且請關閉玩家名稱，勿隨意散布含他人名稱的影像；打烊之後可自由取景，未至逢魔時刻，亦歡迎入內拍攝或掛機。</p></div>
+    <div class="law-item"><span class="ln">六</span><p>本店低消，為 <em>10,000 GIL</em>。</p></div>
+  </div>
+
+  <div class="law-sec reveal">
+    <h3>預約之約 <span class="en">Reservation</span><span class="head-aside">黃昏有限，席位有數。</span></h3>
+    <div class="law-item"><span class="ln">一</span><p>本店採<em>全面預約制</em>，務必完成本月謎題並填寫緣起書。預約截止時間，將於官網及 DC 公布。</p></div>
+    <div class="law-item"><span class="ln">二</span><p>為維持入店體驗，不開放未預約的客人入店；未預約者，可在庭院與妖怪們互動。</p></div>
+  </div>
+</div>
+</main>
+<footer>
+  <div class="fmark">逢魔</div>
+  <div class="fnav">
+    <a href="seats.html">三席</a><a href="menu.html">食單</a><a href="staff.html">奉公人</a>
+    <a href="rules.html">作法</a><a href="ema.html">繪馬牆</a><a href="door.html">推開門</a>
+  </div>
+  <div class="fsub">營業時間 · 黃昏至天明　|　© おうまがとき ── 一個 FFXIV 沉浸式體驗 RP 店<br>（此為角色扮演娛樂，所有「妖怪」皆為虛構）</div>
+</footer>
+<script src="effects.js"></script>
+</body>
+</html>

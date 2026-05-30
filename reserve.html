@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>緣起書 ── 逢魔</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Yuji+Syuku&family=Shippori+Mincho+B1:wght@400;500;600;700&family=Klee+One:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --night:#0a0b10; --amber:#c4612a; --amber-soft:#d98b4a; --amber-glow:#e8a85c;
+    --blood:#7a2018; --moon:#e8e3d6; --moon-dim:#9a9488; --paper:#d8cdb4;
+    --brush:'Yuji Syuku', serif; --mincho:'Shippori Mincho B1', serif; --hand:'Klee One', serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    background:
+      radial-gradient(ellipse 70% 45% at 50% 112%, rgba(196,97,42,.18), transparent 60%),
+      radial-gradient(ellipse 50% 40% at 50% -8%, rgba(122,32,24,.16), transparent 60%),
+      linear-gradient(180deg,#07080c,#0c0d13 60%,#120f0e);
+    background-attachment:fixed; color:var(--moon); font-family:var(--mincho);
+    line-height:1.9; letter-spacing:.04em; min-height:100vh; padding:6rem 1.2rem 4rem;
+  }
+  body::before{content:"";position:fixed;inset:0;z-index:99;pointer-events:none;opacity:.05;mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+  body::after{content:"";position:fixed;inset:0;z-index:98;pointer-events:none;
+    background:radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,.55) 100%);}
+  ::selection{background:var(--blood);color:var(--moon);}
+
+  .back-home{position:fixed;top:1.2rem;left:1.4rem;z-index:50;font-family:var(--brush);
+    font-size:1rem;letter-spacing:.2em;color:var(--moon-dim);text-decoration:none;transition:.4s;}
+  .back-home:hover{color:var(--amber-glow);}
+
+  .scroll{max-width:600px;margin:0 auto;position:relative;z-index:1;}
+
+  .head{text-align:center;margin-bottom:3rem;animation:in 1s cubic-bezier(.16,1,.3,1);}
+  .mark{font-family:var(--brush);font-size:clamp(2.8rem,11vw,4.5rem);color:var(--moon);
+    letter-spacing:.2em;text-shadow:0 0 28px rgba(232,168,92,.22);line-height:1.1;}
+  .en{font-size:.66rem;letter-spacing:.5em;color:var(--amber);text-transform:uppercase;margin-top:1rem;}
+  .lead{color:var(--moon-dim);font-size:.95rem;margin-top:1.6rem;line-height:2.2;}
+  @keyframes in{from{opacity:0;transform:translateY(22px);filter:blur(6px);}to{opacity:1;transform:none;filter:none;}}
+
+  .card{border:1px solid rgba(216,205,180,.14);
+    background:linear-gradient(165deg, rgba(18,19,27,.92), rgba(9,10,15,.92));
+    padding:2.6rem 2rem; box-shadow:0 30px 80px rgba(0,0,0,.55);animation:in 1s .15s backwards cubic-bezier(.16,1,.3,1);}
+
+  .field{margin-bottom:1.8rem;}
+  .field label{display:block;font-family:var(--brush);font-size:1.15rem;color:var(--moon);
+    letter-spacing:.1em;margin-bottom:.3rem;}
+  .field .desc{font-size:15px;color:var(--moon-dim);margin-bottom:.7rem;line-height:1.85;}
+  .field .req{color:var(--amber);font-size:.7rem;letter-spacing:.2em;margin-left:.5rem;}
+
+  input[type=text], textarea, select{
+    width:100%;background:rgba(7,8,12,.8);border:1px solid rgba(216,205,180,.2);
+    color:var(--moon);font-family:var(--mincho);font-size:1rem;letter-spacing:.05em;
+    padding:.85rem 1rem;outline:none;transition:.4s;}
+  textarea{resize:vertical;min-height:90px;line-height:1.9;}
+  input:focus, textarea:focus, select:focus{border-color:var(--amber-glow);box-shadow:0 0 22px rgba(232,168,92,.18);}
+  select{appearance:none;cursor:pointer;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23c4612a' fill='none' stroke-width='1.5'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;background-position:right 1rem center;}
+  input::placeholder, textarea::placeholder{color:#555;}
+
+  .chips{display:flex;flex-wrap:wrap;gap:.7rem;}
+  .chip{flex:1;min-width:120px;text-align:center;background:rgba(13,14,20,.7);
+    border:1px solid rgba(216,205,180,.16);color:var(--moon-dim);font-family:var(--mincho);
+    font-size:.95rem;padding:.85rem .6rem;cursor:pointer;transition:.35s;letter-spacing:.05em;}
+  .chip small{display:block;font-size:.66rem;color:#5a554b;margin-top:.25rem;letter-spacing:.15em;}
+  .chip:hover{border-color:var(--amber-soft);color:var(--moon);}
+  .chip.on{border-color:var(--amber-glow);color:var(--amber-glow);background:rgba(196,97,42,.12);box-shadow:0 0 20px rgba(232,168,92,.15);}
+  .chip.on small{color:var(--amber-soft);}
+
+  .submit{width:100%;margin-top:1rem;font-family:var(--brush);font-size:1.4rem;letter-spacing:.3em;
+    color:var(--moon);background:rgba(10,11,16,.6);border:1px solid rgba(232,168,92,.45);
+    padding:1.1rem;cursor:pointer;transition:.5s cubic-bezier(.16,1,.3,1);}
+  .submit:hover{border-color:var(--amber-glow);color:var(--amber-glow);letter-spacing:.45em;box-shadow:0 0 34px rgba(232,168,92,.25);}
+  .submit:disabled{opacity:.5;cursor:wait;}
+
+  .err{color:var(--blood);font-size:.88rem;margin-top:1rem;min-height:1.3em;letter-spacing:.05em;}
+
+  /* 店長的信 */
+  .letter{max-width:540px;margin:0 auto;background:linear-gradient(160deg,#e9dec4,#d6c5a0);
+    color:#2a1d12;font-family:var(--mincho);padding:3rem 2.6rem 2.6rem;position:relative;
+    box-shadow:0 40px 110px rgba(0,0,0,.7);border:1px solid #c9b790;border-radius:2px;
+    animation:letterin 1.2s cubic-bezier(.16,1,.3,1);}
+  @keyframes letterin{from{opacity:0;transform:translateY(46px) rotate(-2deg) scale(.95);}to{opacity:1;transform:rotate(-.6deg);}}
+  .letter .l-seal{position:absolute;top:1.5rem;right:1.7rem;width:52px;height:52px;border-radius:50%;
+    background:radial-gradient(circle at 40% 35%,#9a2e20,#5a1810);color:#e9dec4;display:flex;align-items:center;
+    justify-content:center;font-family:var(--brush);font-size:1.7rem;box-shadow:0 4px 12px rgba(0,0,0,.45);transform:rotate(-8deg);}
+  .letter .l-head{font-family:var(--brush);font-size:1.7rem;color:#5a2018;letter-spacing:.12em;margin-bottom:1.4rem;}
+  .letter p{color:#3a2a1c;line-height:2.5;margin-bottom:1.1rem;font-size:15px;letter-spacing:.03em;}
+  .letter .l-name{color:#5a2018;font-weight:600;}
+  .letter .l-sign{text-align:right;font-family:var(--brush);font-size:1.4rem;color:#4a2418;margin-top:2rem;letter-spacing:.12em;}
+  .letter-close{display:block;margin:2rem auto 0;font-family:var(--brush);font-size:1.2rem;letter-spacing:.3em;
+    color:var(--moon-dim);background:rgba(10,11,16,.4);border:1px solid rgba(216,205,180,.3);padding:.95rem 2.6rem;cursor:pointer;transition:.5s cubic-bezier(.16,1,.3,1);}
+  .letter-close:hover{color:var(--amber-glow);border-color:var(--amber-glow);letter-spacing:.45em;box-shadow:0 0 28px rgba(232,168,92,.2);}
+  .demo-tag{display:block;text-align:center;max-width:max-content;margin:1.4rem auto 0;font-size:.72rem;letter-spacing:.2em;color:var(--amber);
+    border:1px dashed var(--amber);padding:.4rem .9rem;}
+</style>
+</head>
+<body>
+<a href="index.html" class="back-home">← 逢魔</a>
+
+<div class="scroll" id="scroll">
+
+  <div class="head">
+    <div class="mark">緣起書</div>
+    <div class="en">Tonight's invitation</div>
+    <p class="lead">你解開了今月の怪，找到了通往這裡的路。<br>留下幾筆，閻羅便知道，今晚該如何接待你。</p>
+  </div>
+
+  <div class="card" id="formCard">
+
+    <div class="field">
+      <label>角色名<span class="req">必填</span></label>
+      <div class="desc">今晚，我們該如何稱呼你？</div>
+      <input type="text" id="charName" placeholder="例：夜這 透">
+    </div>
+
+    <div class="field">
+      <label>聯絡方式<span class="req">必填</span></label>
+      <div class="desc">你的 Discord 名稱，方便閻羅回信。</div>
+      <input type="text" id="contact" placeholder="例：yorunashi#0000">
+    </div>
+
+    <div class="field">
+      <label>今月の合言葉<span class="req">必填</span></label>
+      <div class="desc">解開謎題後得到的入店密語。沒有它，門不會開。</div>
+      <input type="text" id="pass" placeholder="輸入這個月的密語">
+    </div>
+
+    <div class="field">
+      <label>人　數</label>
+      <div class="desc">每組以 4 人為限。</div>
+      <select id="party">
+        <option value="1人">1 人</option>
+        <option value="2人">2 人</option>
+        <option value="3人">3 人</option>
+        <option value="4人">4 人</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>想要的席</label>
+      <div class="desc">不同的席，決定「他們」會用什麼方式對待你。</div>
+      <div class="chips" data-group="seat">
+        <div class="chip" data-val="緣側席">緣側席<small>純用餐</small></div>
+        <div class="chip" data-val="奧座敷席">奧座敷席<small>解謎主線</small></div>
+        <div class="chip" data-val="逢魔席">逢魔席<small>全沉浸 · 限縁者</small></div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>謎題給你的指引<span class="req">可留白</span></label>
+      <div class="desc">可以把解謎結尾推薦的「餐點與店員」貼在這裡；<br>也可以自己指定想要的店員，或整欄留白，交給我們安排。</div>
+      <input type="text" id="rec" placeholder="例：夜啼き / 一目小僧（或自行填寫）">
+    </div>
+
+    <div class="field">
+      <label>內緒話<span class="req">可留白</span></label>
+      <div class="desc">寫一件關於你角色的事──一個秘密、一個執念、一個怕的東西，或任何你希望被聊到的。<br>我們會用它，讓今晚的對話更像為你而開。（自願填寫）</div>
+      <textarea id="topic" placeholder="例：我角色總說自己天不怕地不怕，其實很怕黑。"></textarea>
+    </div>
+
+    <button class="submit" id="submitBtn">遞　出　緣　起　書</button>
+    <div class="err" id="err"></div>
+
+  </div>
+</div>
+
+<script>
+/* ╔══════════════════════════════════════════════╗
+   ║              設 定 區（改這裡）              ║
+   ╚══════════════════════════════════════════════╝ */
+
+// ① 這個月的密語（要和謎題頁的 rewardCode 一致）
+const MONTH_PASS = "ろくろ・首なし";
+
+// ② 你的 Discord Webhook 網址。
+//    在 Discord：頻道設定 → 整合 → Webhook → 新增 → 複製網址，貼到這裡。
+//    （留著 "#" 不改 → 會走「示範模式」，不真的送出，方便你先預覽流程）
+const WEBHOOK_URL = "#";
+
+/* ────────────── 以下不用動 ────────────── */
+
+const picks = { seat:"" };
+document.querySelectorAll('.chips').forEach(group=>{
+  const g = group.dataset.group;
+  group.querySelectorAll('.chip').forEach(chip=>{
+    chip.onclick = ()=>{
+      group.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));
+      chip.classList.add('on');
+      picks[g] = chip.dataset.val;
+    };
+  });
+});
+
+const norm = s => (s||"").trim().toLowerCase().replace(/[\s・·]/g,'');
+
+document.getElementById('submitBtn').onclick = async ()=>{
+  const err = document.getElementById('err');
+  const val = id => document.getElementById(id).value.trim();
+  const charName = val('charName'), contact = val('contact'), pass = val('pass');
+
+  // 驗證
+  if(!charName){ err.textContent = "請至少留下一個今晚的名字。"; return; }
+  if(!contact){ err.textContent = "請留下聯絡方式，否則閻羅無法回信。"; return; }
+  if(!pass){ err.textContent = "缺了今月の合言葉。先去解開謎題吧。"; return; }
+  if(norm(pass) !== norm(MONTH_PASS)){ err.textContent = "這不是今晚的密語。門，沒有開。"; return; }
+  err.textContent = "";
+
+  const data = {
+    charName, contact,
+    party: val('party'),
+    seat: picks.seat || "（未選）",
+    rec: val('rec') || "（無）",
+    topic: val('topic') || "（未填）"
+  };
+
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true; btn.textContent = "遞出中…";
+
+  const isDemo = (WEBHOOK_URL === "#" || !WEBHOOK_URL);
+
+  try{
+    if(!isDemo){
+      const payload = {
+        username: "逢魔・緣起書",
+        embeds: [{
+          title: "🏮 新的緣起書",
+          color: 12869930,
+          fields: [
+            { name:"角色名", value:data.charName, inline:true },
+            { name:"聯絡方式", value:data.contact, inline:true },
+            { name:"人數", value:data.party, inline:true },
+            { name:"想要的席", value:data.seat, inline:true },
+            { name:"🍶 指引（餐點/店員）", value:data.rec, inline:false },
+            { name:"💬 內緒話（給店員接待用）", value:data.topic, inline:false }
+          ],
+          footer:{ text:"逢魔 ── おうまがとき" },
+          timestamp: new Date().toISOString()
+        }]
+      };
+      const res = await fetch(WEBHOOK_URL, {
+        method:"POST", headers:{"Content-Type":"application/json"},
+        body: JSON.stringify(payload)
+      });
+      if(!res.ok) throw new Error("webhook failed " + res.status);
+    }
+    showReply(isDemo, data);
+  }catch(e){
+    btn.disabled = false; btn.textContent = "遞　出　緣　起　書";
+    err.textContent = "緣起書沒能送出。請稍後再試，或直接到 Discord 找閻羅。";
+  }
+};
+
+function showReply(isDemo, data){
+  document.getElementById('scroll').innerHTML = `
+    <div class="letter">
+      <div class="l-seal">逢</div>
+      <div class="l-head">拝啓 ──</div>
+      <p><span class="l-name">「${data.charName}」</span> 殿</p>
+      <p>你的緣起書，我已收下。</p>
+      <p>在約定的黃昏之前，你會收到入店的時刻，與一張印著座位的和紙。在那之前——請別忘記，自己今晚的名字。</p>
+      <p>我會在門的另一邊，等你推門。</p>
+      <div class="l-sign">── 閻羅</div>
+    </div>
+    <button class="letter-close" onclick="location.href='index.html'">闔　上　信　→</button>
+    ${isDemo ? '<div class="demo-tag">示範模式 · 尚未填入 Webhook，這次沒有真的送出</div>' : ''}
+  `;
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>逢魔 ── 今月の怪</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Yuji+Syuku&family=Shippori+Mincho+B1:wght@400;500;600;700&family=Klee+One:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --night:#0a0b10; --night-2:#101119; --ink:#05060a;
+    --amber:#c4612a; --amber-soft:#d98b4a; --amber-glow:#e8a85c;
+    --blood:#7a2018; --moon:#e8e3d6; --moon-dim:#9a9488;
+    --paper:#d8cdb4; --paper-dark:#b8a988;
+    --brush:'Yuji Syuku', serif; --mincho:'Shippori Mincho B1', serif; --hand:'Klee One', serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    background:
+      radial-gradient(ellipse 70% 50% at 50% 110%, rgba(196,97,42,.2), transparent 60%),
+      radial-gradient(ellipse 50% 40% at 50% -10%, rgba(122,32,24,.18), transparent 60%),
+      linear-gradient(180deg,#07080c,#0c0d13 60%,#120f0e);
+    background-attachment:fixed;
+    color:var(--moon); font-family:var(--mincho);
+    line-height:1.95; letter-spacing:.04em; min-height:100vh;
+    display:flex; align-items:center; justify-content:center; padding:2rem 1rem;
+  }
+  body::before{content:"";position:fixed;inset:0;z-index:99;pointer-events:none;opacity:.05;mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+  body::after{content:"";position:fixed;inset:0;z-index:98;pointer-events:none;
+    background:radial-gradient(ellipse at center, transparent 45%, rgba(0,0,0,.6) 100%);}
+  ::selection{background:var(--blood);color:var(--moon);}
+
+  .stage{width:100%;max-width:640px;position:relative;z-index:1;}
+  .progress{display:flex;justify-content:center;gap:.9rem;margin-bottom:2.5rem;}
+  .lamp{width:14px;height:20px;border-radius:50% 50% 45% 45%;background:rgba(216,205,180,.12);
+    border:1px solid rgba(216,205,180,.2);transition:.6s;}
+  .lamp.lit{background:radial-gradient(circle at 50% 40%, var(--amber-glow), var(--amber) 70%);
+    box-shadow:0 0 16px rgba(232,168,92,.6);border-color:var(--amber-glow);animation:lampflick 3s infinite;}
+  @keyframes lampflick{0%,100%{opacity:1;}45%{opacity:.7;}}
+
+  .card{border:1px solid rgba(216,205,180,.14);
+    background:linear-gradient(165deg, rgba(18,19,27,.92), rgba(9,10,15,.92));
+    padding:3rem 2.4rem; position:relative; box-shadow:0 30px 80px rgba(0,0,0,.6);
+    animation:cardin 1s cubic-bezier(.16,1,.3,1);}
+  @keyframes cardin{from{opacity:0;transform:translateY(24px) scale(.98);filter:blur(6px);}to{opacity:1;transform:none;filter:none;}}
+  .card.shake{animation:shake .5s;}
+  @keyframes shake{0%,100%{transform:translateX(0);}20%{transform:translateX(-9px);}40%{transform:translateX(8px);}60%{transform:translateX(-6px);}80%{transform:translateX(4px);}}
+
+  .eyebrow{font-size:.66rem;letter-spacing:.5em;color:var(--amber);text-transform:uppercase;margin-bottom:1rem;}
+  .qtitle{font-family:var(--brush);font-size:clamp(2rem,7vw,3rem);color:var(--moon);letter-spacing:.12em;line-height:1.1;
+    text-shadow:0 0 26px rgba(232,168,92,.2);margin-bottom:1.6rem;}
+  .scene{color:var(--moon-dim);font-size:1rem;line-height:2.3;margin-bottom:2rem;}
+  .scene .em{color:var(--amber-glow);font-weight:600;}
+  .prompt{font-size:1.05rem;color:var(--moon);margin-bottom:1.4rem;letter-spacing:.06em;}
+
+  .answer-in{width:100%;background:rgba(7,8,12,.8);border:1px solid rgba(216,205,180,.25);
+    color:var(--moon);font-family:var(--mincho);font-size:1.15rem;letter-spacing:.2em;
+    padding:1rem 1.2rem;text-align:center;outline:none;transition:.4s;}
+  .answer-in:focus{border-color:var(--amber-glow);box-shadow:0 0 24px rgba(232,168,92,.2);}
+
+  .btn{font-family:var(--brush);font-size:1.2rem;letter-spacing:.25em;color:var(--moon);
+    background:rgba(10,11,16,.6);border:1px solid rgba(232,168,92,.4);padding:.85rem 2.4rem;
+    cursor:pointer;transition:.5s cubic-bezier(.16,1,.3,1);}
+  .btn:hover{border-color:var(--amber-glow);color:var(--amber-glow);letter-spacing:.35em;box-shadow:0 0 28px rgba(232,168,92,.25);}
+  .btn.ghost{border-color:rgba(216,205,180,.18);color:var(--moon-dim);font-size:.95rem;}
+  .btn.ghost:hover{color:var(--moon);letter-spacing:.25em;box-shadow:none;}
+  .row{display:flex;gap:1rem;align-items:center;margin-top:1.6rem;flex-wrap:wrap;}
+
+  .opt{display:block;width:100%;text-align:left;background:rgba(13,14,20,.7);
+    border:1px solid rgba(216,205,180,.14);color:var(--moon);font-family:var(--mincho);
+    font-size:1rem;padding:1.1rem 1.4rem;margin-bottom:.9rem;cursor:pointer;transition:.4s;letter-spacing:.05em;}
+  .opt:hover{border-color:var(--amber-soft);background:rgba(20,16,14,.85);transform:translateX(5px);}
+
+  .frag-pool,.frag-slots{display:flex;flex-wrap:wrap;gap:.7rem;margin-bottom:1.2rem;}
+  .frag{background:linear-gradient(160deg,#1a1410,#241a13);border:1px solid rgba(216,205,180,.18);
+    color:var(--paper);font-family:var(--hand);font-size:.92rem;padding:.7rem 1.1rem;cursor:pointer;transition:.3s;}
+  .frag:hover{border-color:var(--amber);transform:translateY(-3px);}
+  .frag-slots{min-height:50px;border:1px dashed rgba(216,205,180,.2);padding:.8rem;border-radius:2px;}
+  .frag-slots:empty::before{content:"按順序點選下方碎片…";color:#555;font-size:.85rem;font-family:var(--mincho);}
+
+  .ofuda-room{display:flex;flex-wrap:wrap;gap:1.2rem;justify-content:center;padding:1.5rem;margin-bottom:1.6rem;
+    background:rgba(7,8,12,.5);border:1px solid rgba(216,205,180,.08);}
+  .ofuda{width:30px;height:54px;background:linear-gradient(180deg,#d8cdb4,#b8a988);position:relative;box-shadow:0 4px 10px rgba(0,0,0,.5);}
+  .ofuda::after{content:"符";position:absolute;top:6px;left:0;right:0;text-align:center;color:#5a2018;font-family:var(--brush);font-size:.85rem;}
+  .ofuda.faint{opacity:.18;}
+
+  .mirror{display:inline-block;transform:scaleX(-1);font-family:var(--brush);font-size:2.4rem;color:var(--amber-glow);letter-spacing:.3em;padding:1rem 0;}
+
+  .feedback{margin-top:1.3rem;font-size:.95rem;letter-spacing:.08em;min-height:1.5em;}
+  .feedback.bad{color:var(--blood);}
+  .feedback.good{color:var(--amber-glow);}
+  .hint-box{margin-top:1.2rem;font-size:.9rem;color:var(--moon-dim);font-style:italic;border-left:2px solid var(--amber);padding-left:1rem;line-height:2;}
+
+  .center{text-align:center;}
+  .big-mark{font-family:var(--brush);font-size:clamp(3.5rem,14vw,7rem);color:var(--moon);letter-spacing:.15em;text-shadow:0 0 34px rgba(232,168,92,.25);line-height:1;}
+  .sub{font-family:var(--brush);color:var(--amber-glow);letter-spacing:.6em;margin-top:1.5rem;font-size:1rem;}
+  .fade{animation:cardin .9s;}
+
+  /* ── 分支結局的推薦卡 ── */
+  .rec{border:1px solid rgba(216,205,180,.16);background:rgba(13,14,20,.6);
+    padding:1.6rem 1.5rem;margin-top:1.2rem;text-align:left;position:relative;overflow:hidden;}
+  .rec::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 0% 0%, rgba(196,97,42,.12), transparent 55%);}
+  .rec .rlabel{font-size:.64rem;letter-spacing:.4em;color:var(--amber);text-transform:uppercase;margin-bottom:.6rem;position:relative;}
+  .rec .rname{font-family:var(--brush);font-size:1.6rem;color:var(--amber-glow);letter-spacing:.1em;position:relative;}
+  .rec .rrole{font-size:.72rem;letter-spacing:.3em;color:var(--moon-dim);margin-top:.2rem;position:relative;}
+  .rec .rwhy{font-size:.9rem;color:var(--moon-dim);line-height:2;margin-top:.9rem;position:relative;font-style:italic;}
+
+  .reward{margin-top:1.6rem;padding:1.6rem;border:1px solid var(--amber);background:rgba(196,97,42,.08);text-align:center;}
+  .reward .label{font-size:.66rem;letter-spacing:.4em;color:var(--amber);text-transform:uppercase;}
+  .reward .code{font-family:var(--brush);font-size:1.8rem;color:var(--amber-glow);letter-spacing:.3em;margin:.6rem 0;}
+
+  /* 回官網角落連結 */
+  .back-home{position:fixed;top:1.2rem;left:1.4rem;z-index:50;font-family:var(--brush);
+    font-size:1rem;letter-spacing:.2em;color:var(--moon-dim);text-decoration:none;transition:.4s;}
+  .back-home:hover{color:var(--amber-glow);}
+</style>
+</head>
+<body>
+<a href="index.html" class="back-home">← 逢魔</a>
+<div class="stage">
+  <div class="progress" id="progress"></div>
+  <div id="root"></div>
+</div>
+
+<script>
+/* ╔══════════════════════════════════════════════════════════════╗
+   ║          逢 魔 ── 當 月 內 容 區（每月只改這裡）              ║
+   ║                                                              ║
+   ║   謎題型別：input / choice / sequence                        ║
+   ║   結尾是 branch（三選一）→ 每個選擇推薦一道餐點＋一位店員      ║
+   ╚══════════════════════════════════════════════════════════════╝ */
+
+const OMAGATOKI = {
+
+  meta: {
+    eyebrow: "第一夜 · 今月の怪",
+    yokai: "轆轤首",
+    title: "首を見るな",
+    intro: "你又一次，在黃昏時推開了那扇門。<br><br>今晚迎接你的，是一位脖子細長、語氣輕柔的女子。她沒有報上名字，只說——<span class='em'>「在天亮之前，找到你帶來的那個『缺口』。否則它會留在這裡。」</span><br><br>她轉身領路。你注意到，她的脖子，似乎比剛才又長了一點。",
+    startBtn: "踏進去"
+  },
+
+  puzzles: [
+    {
+      type: "input",
+      eyebrow: "其一 · 走廊",
+      title: "幾　張",
+      scene: "走廊兩側貼滿了紙符。女子說：<br>「能看清幾張，你今晚，就走得了幾步。」<br><br>有些符，藏在燈照不到的地方。",
+      visual: "ofuda:7:2",
+      prompt: "你數得出幾張符？",
+      placeholder: "輸入數字",
+      answers: ["7", "七"],
+      hints: ["別只數亮的。影子裡也有。", "亮的五張，淡的兩張。"],
+      success: "燈，一盞一盞亮了起來。<br>「看得很清楚嘛。」她輕聲說。"
+    },
+    {
+      type: "input",
+      eyebrow: "其二 · 茶席",
+      title: "杯底の字",
+      scene: "她端來一杯溫茶。你喝完，杯底浮現兩個字——<br>但它們，是反的。",
+      visual: "mirror:忘川",
+      prompt: "杯底寫的，是哪兩個字？",
+      placeholder: "輸入正確的字",
+      answers: ["忘川", "忘川。"],
+      hints: ["把它放到鏡子前面，或者……倒過來看。", "是飲品單上的第一道。「喝下去之前，請先記住自己的名字。」"],
+      success: "「記住自己的名字了嗎？」她問。<br>你點頭。其實，你已經有點不確定了。"
+    },
+    {
+      type: "choice",
+      eyebrow: "其三 · 她的規矩",
+      title: "別　看",
+      scene: "女子忽然停下，緩緩轉身面對你。<br>她的脖子，此刻長得不像話。<br><br>你知道，這一刻你怎麼做，決定了你能不能走下去。",
+      prompt: "你要怎麼回應她？",
+      options: [
+        { text: "直視她的眼睛，輕聲道謝。", correct: true },
+        { text: "忍不住，盯著她不斷拉長的脖子。", consequence: "她的笑容凝住了。「……你看了。」脖子猛地朝你伸來。<br>（你違反了她的規矩。再試一次。）" },
+        { text: "嚇得轉身就跑。", consequence: "門，在你面前消失了。你哪裡也去不了。<br>（再想想，該怎麼面對她。）" },
+        { text: "低頭，假裝什麼都沒看到。", consequence: "「別裝了。」她說。逃避，不是這裡的規矩。<br>（再試一次。）" }
+      ],
+      hints: ["想想入店時，關於她的那條規矩。", "規矩是：不可直視她的脖子。那麼，該看哪裡？"],
+      success: "她的脖子，緩緩縮了回去。<br>「懂規矩的客人，不多了。」"
+    },
+    {
+      type: "sequence",
+      eyebrow: "其四 · 那一天",
+      title: "拼回記憶",
+      scene: "女子遞給你四片殘破的紙。<br>「這是你帶進來的東西。把它拼回原本的順序。」",
+      prompt: "按正確的順序，點選下面的碎片：",
+      fragments: [
+        { id: "c", text: "你說了句狠話。" },
+        { id: "a", text: "那天，有人在等你。" },
+        { id: "d", text: "然後，你再也沒回去。" },
+        { id: "b", text: "你遲到了，而且很煩躁。" }
+      ],
+      order: ["a", "b", "c", "d"],
+      hints: ["從「有人在等你」開始。", "順序是：等你 → 遲到 → 狠話 → 沒回去。"],
+      success: "四片紙拼成了一句完整的話。<br>你看清了那天發生的事——<br>但缺口的形狀，還得由你自己指認。"
+    }
+  ],
+
+  /* ── 三選一分支結局 ── */
+  branch: {
+    eyebrow: "終 · 指認",
+    title: "你的缺口",
+    scene: "女子把那句話收進袖中，安靜地看著你。<br>「現在，告訴我——<br>你帶進來的缺口，比較像哪一種？」",
+    prompt: "選一個，最接近你的：",
+
+    // 三個結局。每個對應：結局文字 + 推薦餐點 + 推薦店員
+    results: [
+      {
+        choice: "一句，沒能說出口的話",
+        ending: "你帶來的，是一句卡在喉嚨裡、最後嚥了回去的話。它不重，卻一直壓著你。",
+        dish:  { name: "夜啼き", desc: "苦的那部分，是真實的。" },
+        staff: { name: "一目小僧", role: "嚮導", why: "他說謊時，那隻眼會閉上。在他面前，有些話，你會發現再也藏不住。讓他陪你，把它說完。" }
+      },
+      {
+        choice: "一個，沒能留住的人",
+        ending: "你帶來的，是一個你來不及挽留的身影。你以為你忘了，飯卻還是熱的。",
+        dish:  { name: "她留下的飯", desc: "沒有人記得她是誰了，但飯還是熱的。" },
+        staff: { name: "雪女", role: "點單", why: "她最懂，有些東西會在你眼前慢慢消失。她會提醒你——請在它消失之前，把話說完。" }
+      },
+      {
+        choice: "一件，想假裝沒發生的事",
+        ending: "你帶來的，是一件你一直背對著、假裝看不見的事。它，就站在房間的角落。",
+        dish:  { name: "人魚の涙", desc: "鹹。但不是眼淚的那種鹹。" },
+        staff: { name: "影女", role: "？？？", why: "她只在光線消失時現身。她會告訴你，那個你不敢回頭看的東西，其實一直都在。" }
+      }
+    ],
+
+    // 結局共用的解鎖獎勵
+    finaleTitle: "天，亮了",
+    finaleLead: "你指認了自己的缺口。女子最後一次回頭，這次你沒有看她的脖子。她笑了。<br><span class='em'>本月「逢魔」為你開門。</span>",
+    rewardLabel: "今月の合言葉 · 入店密語",
+    rewardCode: "ろくろ・首なし",
+    rewardNote: "（把這句密語、以及上面為你推薦的『餐點與服侍店員』，一起貼進預約處，閻羅便知道今晚該如何接待你。）",
+
+    // ↓↓↓ 解開謎題後才出現的預約入口。把 # 換成你的 Discord 邀請連結或 Google 表單網址 ↓↓↓
+    predictUrl: "reserve.html",
+    predictBtn: "帶著密語，前往預約　→"
+  }
+};
+
+/* ╔══════════════════════════════════════════════════════════════╗
+   ║          以 下 是 引 擎 　 ── 　 平 常 不 用 動                ║
+   ╚══════════════════════════════════════════════════════════════╝ */
+
+const root = document.getElementById('root');
+const progressEl = document.getElementById('progress');
+let current = -1, hintIndex = 0, seqPicked = [];
+const norm = s => (s||"").trim().toLowerCase().replace(/\s+/g,'');
+
+function buildProgress(){
+  // 謎題數 + 1 顆給分支
+  progressEl.innerHTML = OMAGATOKI.puzzles.map(()=>'<div class="lamp"></div>').join('') + '<div class="lamp"></div>';
+}
+function lightLamps(n){ document.querySelectorAll('.lamp').forEach((l,i)=>l.classList.toggle('lit', i<n)); }
+
+function renderVisual(v){
+  if(!v) return "";
+  if(v.startsWith("ofuda:")){
+    const parts=v.split(":"); const total=+parts[1], faint=+parts[2];
+    let h='<div class="ofuda-room">';
+    for(let i=0;i<total;i++) h+=`<div class="ofuda ${i>=total-faint?'faint':''}"></div>`;
+    return h+'</div>';
+  }
+  if(v.startsWith("mirror:")) return `<div class="center"><span class="mirror">${v.slice(7)}</span></div>`;
+  return "";
+}
+
+function renderIntro(){
+  const m=OMAGATOKI.meta;
+  root.innerHTML=`
+    <div class="card center fade">
+      <div class="eyebrow">${m.eyebrow}</div>
+      <div class="big-mark">${m.yokai}</div>
+      <div class="sub">${m.title}</div>
+      <p class="scene" style="margin-top:2.2rem;text-align:left;">${m.intro}</p>
+      <button class="btn" id="start">${m.startBtn}　→</button>
+    </div>`;
+  document.getElementById('start').onclick=()=>{current=0;hintIndex=0;renderPuzzle();};
+  lightLamps(0);
+}
+
+function renderPuzzle(){
+  const p=OMAGATOKI.puzzles[current];
+  hintIndex=0; seqPicked=[]; lightLamps(current);
+  let body="";
+  if(p.type==="input"){
+    body=`${renderVisual(p.visual)}
+      <p class="prompt">${p.prompt}</p>
+      <input class="answer-in" id="ans" placeholder="${p.placeholder||'輸入答案'}" autocomplete="off">
+      <div class="row"><button class="btn" id="check">確　認</button><button class="btn ghost" id="hint">求一個提示</button></div>`;
+  } else if(p.type==="choice"){
+    body=`<p class="prompt">${p.prompt}</p>`+p.options.map((o,i)=>`<button class="opt" data-i="${i}">${o.text}</button>`).join('')+
+      `<div class="row"><button class="btn ghost" id="hint">求一個提示</button></div>`;
+  } else if(p.type==="sequence"){
+    body=`<p class="prompt">${p.prompt}</p>
+      <div class="frag-slots" id="slots"></div>
+      <div class="frag-pool" id="pool">${p.fragments.map(f=>`<div class="frag" data-id="${f.id}">${f.text}</div>`).join('')}</div>
+      <div class="row"><button class="btn" id="check">確　認</button><button class="btn ghost" id="reset">重　來</button><button class="btn ghost" id="hint">求一個提示</button></div>`;
+  }
+  root.innerHTML=`
+    <div class="card fade" id="card">
+      <div class="eyebrow">${p.eyebrow}</div>
+      <div class="qtitle">${p.title}</div>
+      <p class="scene">${p.scene}</p>
+      ${body}
+      <div class="feedback" id="fb"></div>
+      <div id="hintzone"></div>
+    </div>`;
+  wireEvents(p);
+}
+
+function wireEvents(p){
+  const fb=document.getElementById('fb'), card=document.getElementById('card');
+  const bad=msg=>{fb.className="feedback bad";fb.innerHTML=msg;card.classList.remove('shake');void card.offsetWidth;card.classList.add('shake');};
+  const hintBtn=document.getElementById('hint');
+  if(hintBtn) hintBtn.onclick=()=>{
+    const hz=document.getElementById('hintzone');
+    if(hintIndex<p.hints.length){
+      const d=document.createElement('div'); d.className='hint-box fade'; d.textContent="提示："+p.hints[hintIndex];
+      hz.appendChild(d); hintIndex++;
+      if(hintIndex>=p.hints.length) hintBtn.textContent="沒有更多提示了";
+    }
+  };
+  if(p.type==="input"){
+    const input=document.getElementById('ans');
+    const go=()=>{ p.answers.some(a=>norm(a)===norm(input.value)) ? win(p) : bad("不對。再看一次。"); };
+    document.getElementById('check').onclick=go;
+    input.addEventListener('keydown',e=>{if(e.key==='Enter')go();}); input.focus();
+  }
+  if(p.type==="choice"){
+    root.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
+      const o=p.options[+b.dataset.i]; o.correct ? win(p) : bad(o.consequence||"不對。");
+    });
+  }
+  if(p.type==="sequence"){
+    const pool=document.getElementById('pool'), slots=document.getElementById('slots');
+    pool.querySelectorAll('.frag').forEach(f=>f.onclick=()=>{
+      seqPicked.push(f.dataset.id); f.style.display='none';
+      const c=document.createElement('div'); c.className='frag'; c.textContent=f.textContent; slots.appendChild(c);
+    });
+    document.getElementById('reset').onclick=()=>{seqPicked=[];slots.innerHTML='';pool.querySelectorAll('.frag').forEach(f=>f.style.display='');};
+    document.getElementById('check').onclick=()=>{
+      if(seqPicked.length<p.order.length){bad("還沒拼完。");return;}
+      seqPicked.join(',')===p.order.join(',') ? win(p) : bad("順序不對。它們，不是這樣發生的。");
+    };
+  }
+}
+
+function win(p){
+  const fb=document.getElementById('fb');
+  fb.className="feedback good"; fb.innerHTML=p.success;
+  root.querySelectorAll('button,input,.opt,.frag').forEach(el=>{el.disabled=true;el.style.pointerEvents='none';el.style.opacity='.5';});
+  const last = current >= OMAGATOKI.puzzles.length-1;
+  const cont=document.createElement('div'); cont.className='row';
+  cont.innerHTML=`<button class="btn" id="next">${last?'指認你的缺口　→':'繼續　→'}</button>`;
+  document.getElementById('card').appendChild(cont);
+  document.getElementById('next').onclick=()=>{
+    current++;
+    if(current<OMAGATOKI.puzzles.length) renderPuzzle();
+    else renderBranch();
+  };
+  lightLamps(current+1);
+}
+
+/* ── 分支：指認缺口 ── */
+function renderBranch(){
+  const b=OMAGATOKI.branch;
+  lightLamps(OMAGATOKI.puzzles.length);
+  root.innerHTML=`
+    <div class="card fade">
+      <div class="eyebrow">${b.eyebrow}</div>
+      <div class="qtitle">${b.title}</div>
+      <p class="scene">${b.scene}</p>
+      <p class="prompt">${b.prompt}</p>
+      ${b.results.map((r,i)=>`<button class="opt" data-i="${i}">${r.choice}</button>`).join('')}
+    </div>`;
+  root.querySelectorAll('.opt').forEach(btn=>btn.onclick=()=>renderResult(+btn.dataset.i));
+}
+
+/* ── 個人化結局 + 餐點/店員推薦 ── */
+function renderResult(i){
+  const b=OMAGATOKI.branch, r=b.results[i];
+  lightLamps(OMAGATOKI.puzzles.length+1);
+  root.innerHTML=`
+    <div class="card fade">
+      <div class="eyebrow center">${b.eyebrow}</div>
+      <div class="big-mark center" style="font-size:clamp(2.4rem,9vw,4rem);">${b.finaleTitle}</div>
+      <p class="scene" style="margin-top:2rem;">${b.finaleLead}</p>
+      <p class="scene" style="color:var(--moon);border-top:1px solid rgba(216,205,180,.12);padding-top:1.6rem;">${r.ending}</p>
+
+      <div class="rec fade">
+        <div class="rlabel">為你溫的一道</div>
+        <div class="rname">${r.dish.name}</div>
+        <div class="rwhy">「${r.dish.desc}」</div>
+      </div>
+
+      <div class="rec fade">
+        <div class="rlabel">今晚，由她／他服侍你</div>
+        <div class="rname">${r.staff.name}</div>
+        <div class="rrole">${r.staff.role}</div>
+        <div class="rwhy">${r.staff.why}</div>
+      </div>
+
+      <div class="reward">
+        <div class="label">${b.rewardLabel}</div>
+        <div class="code">「${b.rewardCode}」</div>
+        <p class="scene" style="margin:0;font-size:.82rem;">${b.rewardNote}</p>
+      </div>
+
+      <div class="row center" style="justify-content:center;gap:1.2rem;flex-direction:column;">
+        <a href="${b.predictUrl}" class="btn" target="_blank" rel="noopener">${b.predictBtn}</a>
+        <button class="btn ghost" id="again">換一個答案</button>
+      </div>
+    </div>`;
+  document.getElementById('again').onclick=()=>renderBranch();
+}
+
+buildProgress();
+renderIntro();
+</script>
+</body>
+</html>

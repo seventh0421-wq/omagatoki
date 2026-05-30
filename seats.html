@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>三席 ── 逢魔</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<nav class="bar">
+  <a href="index.html" class="home">逢魔</a>
+  <button class="toggle" onclick="document.querySelector('.links').classList.toggle('open')">≡ 品書</button>
+  <div class="links">
+    <a href="seats.html">三席</a>
+    <a href="menu.html">食單</a>
+    <a href="staff.html">奉公人</a>
+    <a href="rules.html">作法</a>
+    <a href="ema.html">繪馬牆</a>
+    <a href="door.html">推開門</a>
+  </div>
+</nav>
+<main class="page">
+<div class="lantern" style="top:14%;right:8%;width:160px;height:200px;opacity:.4;"></div>
+
+<div class="wrap">
+  <div class="page-head reveal">
+    <div class="page-mark">三　席</div>
+    <span class="page-en">Choose your seat</span>
+    <p class="page-lead">推開門之後，你得先選擇今晚要坐哪一席。<br>不同的席位，決定「他們」會用什麼方式對待你。</p>
+  </div>
+  <div class="seat-grid">
+    <div class="seat reveal">
+      <div class="jp">緣側席</div>
+      <div class="lv">純用餐 · 入門</div>
+      <p>只享用菜色與氣氛，不被拉進劇情。店員仍是「他們」，但不會主動靠近你。適合第一次推開這扇門的人。</p>
+    </div>
+    <div class="seat reveal">
+      <div class="jp">奧座敷席</div>
+      <div class="lv">解謎主線 · 進階</div>
+      <p>妖怪接待和解謎交錯進行，每一句話、每一個舉動，都有可能是線索，適合初次體驗及有經驗的客人入座。</p>
+    </div>
+    <div class="seat reveal">
+      <div class="jp">逢魔席</div>
+      <div class="lv">全沉浸 · 限緣者</div>
+      <p><span class="veil">從推開門那一刻，劇情就已經開始。規則不會被解釋──你得自己摸索。每一處的字，都模糊得讀不真切……</span><br><span class="clear">僅開放緣者入座。</span></p>
+    </div>
+  </div>
+  <div class="divider"></div>
+  <p style="text-align:center;color:var(--moon-dim);font-size:.9rem;letter-spacing:.1em;">
+    來過三次（含）以上、並收集三個（含）以上信物的客人，將升格為「<span style="color:var(--amber-soft);">緣者</span>」。<br>請將信物交給任一位妖怪——閻羅會記住所有升格的緣者，<br>並為你保留、預約那最深的一席。
+  </p>
+  <div style="text-align:center;margin-top:1.8rem;"><a href="tokens.html" class="door-btn" style="font-size:1.1rem;padding:.9rem 2.2rem;">翻開你的信物帳　→</a></div>
+</div>
+</main>
+<footer>
+  <div class="fmark">逢魔</div>
+  <div class="fnav">
+    <a href="seats.html">三席</a><a href="menu.html">食單</a><a href="staff.html">奉公人</a>
+    <a href="rules.html">作法</a><a href="ema.html">繪馬牆</a><a href="door.html">推開門</a>
+  </div>
+  <div class="fsub">營業時間 · 黃昏至天明　|　© おうまがとき ── 一個 FFXIV 沉浸式體驗 RP 店<br>（此為角色扮演娛樂，所有「妖怪」皆為虛構）</div>
+</footer>
+<script src="effects.js"></script>
+</body>
+</html>

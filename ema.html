@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>繪馬牆 ── 逢魔</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<nav class="bar">
+  <a href="index.html" class="home">逢魔</a>
+  <button class="toggle" onclick="document.querySelector('.links').classList.toggle('open')">≡ 品書</button>
+  <div class="links">
+    <a href="seats.html">三席</a>
+    <a href="menu.html">食單</a>
+    <a href="staff.html">奉公人</a>
+    <a href="rules.html">作法</a>
+    <a href="ema.html">繪馬牆</a>
+    <a href="door.html">推開門</a>
+  </div>
+</nav>
+<main class="page">
+<div class="lantern" style="top:14%;right:8%;width:160px;height:200px;opacity:.4;"></div>
+
+<div class="wrap">
+  <div class="page-head reveal">
+    <div class="page-mark">繪馬牆</div>
+    <span class="page-en">Leave what you wish to lose</span>
+    <p class="page-lead">想忘記的人、想擱下的悔、希望消失的感情──<br>掛上來，留在門的這一邊。</p>
+    <p class="ema-warn">向妖怪許願所付出的代價，即使是神明也無法挽回——你想好了嗎？</p>
+  </div>
+  <div class="ema-form reveal">
+    <div class="ef-title">親手掛上一枚</div>
+    <input id="ema-pw" class="ef-pw" type="text" autocomplete="off" placeholder="先付出代價，向店長取得當夜的暗號……">
+    <textarea id="ema-wish" maxlength="40" placeholder="寫下你想許的願，或想放下的事……（40 字內）"></textarea>
+    <div class="ef-row">
+      <input id="ema-by" maxlength="12" placeholder="署名（可留白）">
+      <button id="ema-hang">掛　上</button>
+    </div>
+    <div class="ef-fb" id="ema-fb"></div>
+  </div>
+
+  <div class="ema-board" id="board">
+    <div class="ema-card reveal aged torn" style="--rot:-3deg"><div class="txt">希望忘記那年夏天的雨聲。</div><div class="by">── 無名</div></div>
+    <div class="ema-card reveal" style="--rot:2deg"><div class="txt">想放下一個，早就不在的人。</div><div class="by">── 阿夜</div></div>
+    <div class="ema-card reveal aged smudge" style="--rot:-1.5deg"><div class="txt">願這份愧疚，留在門的另一邊。</div><div class="by">── ？</div></div>
+    <div class="ema-card reveal aged illegible" style="--rot:3deg"><div class="txt">想忘記自己叫什麼名字。</div><div class="by">── （無法辨識）</div></div>
+    <div class="ema-card reveal" style="--rot:-2deg"><div class="txt">希望那扇門，下次別再為我而開。</div><div class="by">── 縁者</div></div>
+    <div class="ema-card reveal" style="--rot:1.5deg"><div class="txt">把那句沒說出口的話，留在這裡。</div><div class="by">── 雨</div></div>
+  </div>
+  <p class="menu-note reveal">※ 寫下的繪馬，會永久掛在這面牆上，所有踏入逢魔的人都看得見。</p>
+</div>
+</main>
+<footer>
+  <div class="fmark">逢魔</div>
+  <div class="fnav">
+    <a href="seats.html">三席</a><a href="menu.html">食單</a><a href="staff.html">奉公人</a>
+    <a href="rules.html">作法</a><a href="ema.html">繪馬牆</a><a href="door.html">推開門</a>
+  </div>
+  <div class="fsub">營業時間 · 黃昏至天明　|　© おうまがとき ── 一個 FFXIV 沉浸式體驗 RP 店<br>（此為角色扮演娛樂，所有「妖怪」皆為虛構）</div>
+</footer>
+<script src="effects.js"></script>
+<script>
+(function(){
+  const API = "https://script.google.com/macros/s/AKfycbzA4HnXzHdbt8z4s8UAjGH9km3JJco2NWl3CXGvz2oWN8h9H9nFuPKAPK7EOsOgh5TmxQ/exec";
+  const board = document.getElementById('board');
+  const wishEl = document.getElementById('ema-wish');
+  const byEl = document.getElementById('ema-by');
+  const fb = document.getElementById('ema-fb');
+  const hangBtn = document.getElementById('ema-hang');
+  const rots = [-3,-2,-1.5,1.5,2,3];
+  function esc(s){return (s==null?'':String(s)).replace(/[&<>"']/g,function(c){return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c];});}
+  function makeCard(wish, by, animate){
+    const rot = rots[Math.floor(Math.random()*rots.length)];
+    const card = document.createElement('div');
+    card.className = 'ema-card' + (animate?' just-hung':'');
+    card.style.setProperty('--rot', rot+'deg');
+    card.innerHTML = '<div class="txt">'+esc(wish)+'</div><div class="by">── '+esc(by||'無名')+'</div>';
+    return card;
+  }
+  // 讀取（JSONP，避免跨網域限制）：把 Sheet 的繪馬掛回牆上
+  (function load(){
+    const cb = 'emaCb_' + Date.now();
+    window[cb] = function(list){
+      try{
+        if(Array.isArray(list)){
+          list.slice().reverse().forEach(function(it){
+            if(it && it.wish) board.insertBefore(makeCard(it.wish, it.by, false), board.firstChild);
+          });
+        }
+      }catch(e){}
+      delete window[cb]; if(sc.parentNode) sc.parentNode.removeChild(sc);
+    };
+    var sc = document.createElement('script');
+    sc.src = API + '?callback=' + cb;
+    sc.onerror = function(){ delete window[cb]; };
+    document.body.appendChild(sc);
+  })();
+  const pwEl = document.getElementById('ema-pw');
+  // 掛上：先驗暗號 → 寫入 Google Sheet → 掛上牆
+  hangBtn.addEventListener('click', function(){
+    const pw = pwEl.value.trim();
+    const w = wishEl.value.trim();
+    if(!pw){ fb.style.color='#c23b2c'; fb.textContent='沒有代價的願，這面牆不收。'; return; }
+    if(!w){ fb.style.color='#c23b2c'; fb.textContent='先寫下你的願……'; return; }
+    const by = byEl.value.trim() || '無名';
+    fb.style.color=''; fb.textContent='正在向妖怪低語……';
+    hangBtn.disabled = true;
+    var payload = JSON.stringify({pw:pw, wish:w, by:by});
+    // 因為要讀後端的「成功/失敗」回應，這裡用 JSONP 取代 no-cors POST
+    var cb = 'emaPost_' + Date.now();
+    window[cb] = function(res){
+      hangBtn.disabled = false;
+      delete window[cb]; if(ps.parentNode) ps.parentNode.removeChild(ps);
+      if(res && res.ok){
+        board.insertBefore(makeCard(w, by, true), board.firstChild);
+        wishEl.value=''; byEl.value=''; pwEl.value='';
+        fb.style.color=''; fb.textContent='繪馬已掛上。願與代價，都留在這裡了。';
+      } else {
+        fb.style.color='#c23b2c'; fb.textContent='這不是今夜的暗號。妖怪，沒有收下你的願。';
+      }
+    };
+    var ps = document.createElement('script');
+    ps.src = API + '?action=hang&callback=' + cb + '&data=' + encodeURIComponent(payload);
+    ps.onerror = function(){ hangBtn.disabled=false; delete window[cb]; fb.style.color='#c23b2c'; fb.textContent='門的另一邊沒有回應，請稍後再試。'; };
+    document.body.appendChild(ps);
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>逢魔 ── おうまがとき</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav class="bar">
+  <a href="index.html" class="home">逢魔</a>
+  <button class="toggle" onclick="document.querySelector('.links').classList.toggle('open')">≡ 品書</button>
+  <div class="links">
+    <a href="seats.html">三席</a>
+    <a href="menu.html">食單</a>
+    <a href="staff.html">奉公人</a>
+    <a href="rules.html">作法</a>
+    <a href="ema.html">繪馬牆</a>
+    <a href="door.html">推開門</a>
+  </div>
+</nav>
+
+<!-- Hero -->
+<header class="hero">
+  <div class="torii-line"></div>
+  <div class="lantern" style="top:18%;left:12%;width:140px;height:200px;"></div>
+  <div class="lantern" style="top:30%;right:10%;width:100px;height:160px;animation-delay:1.3s;opacity:.7;"></div>
+  <div class="lantern" style="bottom:8%;left:46%;width:220px;height:120px;animation-delay:2.1s;opacity:.55;"></div>
+
+  <h1 class="hero-title">逢魔</h1>
+  <div class="hero-sub">おうまがとき</div>
+
+  <div class="hero-whisper">
+    你在黃昏時走進了一條不該存在的巷子，<br>
+    推開了一扇你不確定自己有沒有敲過的門。<br>
+    裡面的人用正常的語氣問你──<br>
+    「<span class="glitch-name">今晚</span>，想要哪種服務？」
+  </div>
+
+  <a href="#intro" class="enter-hint">入　店</a>
+</header>
+
+<!-- 序章 -->
+<section class="intro" id="intro">
+  <div class="wrap reveal">
+    <p>逢魔不是餐廳，也不是密室。</p>
+    <p>它是兩者之間的東西──<br><span class="em">你用的餐是真實的，但餐桌上發生的事，不一定。</span></p>
+    <div class="divider"></div>
+    <p>這裡的營業時間，從黃昏與夜的交界開始。<br>那是人與「非人」之間，界線最薄的一刻。</p>
+    <div style="margin-top:3rem;">
+      <a href="door.html" class="door-btn" style="font-size:1.2rem;padding:1rem 2.6rem;">推 開 門　→</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="fmark">逢魔</div>
+  <div class="fnav">
+    <a href="seats.html">三席</a><a href="menu.html">食單</a><a href="staff.html">奉公人</a>
+    <a href="rules.html">作法</a><a href="ema.html">繪馬牆</a><a href="door.html">推開門</a>
+  </div>
+  <div class="fsub">營業時間 · 黃昏至天明　|　© おうまがとき ── 一個 FFXIV 沉浸式體驗 RP 店<br>（此為角色扮演娛樂，所有「妖怪」皆為虛構）</div>
+</footer>
+
+<script src="effects.js"></script>
+</body>
+</html>

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>信物帳 ── 逢魔</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Yuji+Syuku&family=Shippori+Mincho+B1:wght@400;500;600;700&family=Klee+One:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --night:#0a0b10; --amber:#c4612a; --amber-soft:#d98b4a; --amber-glow:#e8a85c;
+    --blood:#7a2018; --moon:#e8e3d6; --moon-dim:#9a9488; --paper:#d8cdb4;
+    --brush:'Yuji Syuku', serif; --mincho:'Shippori Mincho B1', serif; --hand:'Klee One', serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    background:
+      radial-gradient(ellipse 60% 45% at 50% 110%, rgba(196,97,42,.16), transparent 60%),
+      radial-gradient(ellipse 50% 40% at 50% -8%, rgba(122,32,24,.14), transparent 60%),
+      linear-gradient(180deg,#07080c,#0c0d13 60%,#100e0d);
+    background-attachment:fixed; color:var(--moon); font-family:var(--mincho);
+    line-height:1.9; letter-spacing:.04em; min-height:100vh;
+  }
+  body::before{content:"";position:fixed;inset:0;z-index:99;pointer-events:none;opacity:.05;mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+  body::after{content:"";position:fixed;inset:0;z-index:98;pointer-events:none;
+    background:radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,.5) 100%);}
+  ::selection{background:var(--blood);color:var(--moon);}
+
+  nav.bar{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;
+    padding:1rem 2rem;background:linear-gradient(180deg, rgba(7,8,12,.92), rgba(7,8,12,0));backdrop-filter:blur(4px);}
+  nav.bar .home{font-family:var(--brush);font-size:1.9rem;color:var(--moon);text-decoration:none;letter-spacing:.15em;text-shadow:0 0 18px rgba(232,168,92,.3);transition:.4s;}
+  nav.bar .home:hover{color:var(--amber-glow);}
+  nav.bar .links{display:flex;gap:1.7rem;flex-wrap:wrap;}
+  nav.bar .links a{font-family:var(--brush);font-size:1.05rem;color:var(--moon-dim);text-decoration:none;letter-spacing:.18em;position:relative;transition:.4s;padding-bottom:.2rem;}
+  nav.bar .links a::after{content:"";position:absolute;left:0;bottom:-2px;width:0;height:1px;background:var(--amber-glow);transition:.4s;}
+  nav.bar .links a:hover{color:var(--moon);} nav.bar .links a:hover::after{width:100%;}
+  nav.bar .toggle{display:none;background:none;border:none;color:var(--moon);font-family:var(--brush);font-size:1.3rem;cursor:pointer;letter-spacing:.1em;}
+
+  .page{max-width:920px;margin:0 auto;padding:8rem 1.5rem 6rem;}
+  .head{text-align:center;margin-bottom:2rem;}
+  .head .mark{font-family:var(--brush);font-size:clamp(2.6rem,8vw,4.5rem);color:var(--moon);letter-spacing:.18em;text-shadow:0 0 28px rgba(232,168,92,.2);}
+  .head .en{font-size:.72rem;letter-spacing:.5em;color:var(--amber);text-transform:uppercase;margin-top:.8rem;}
+  .head .lead{color:var(--moon-dim);font-size:15px;margin-top:1.4rem;line-height:2.1;}
+
+  /* 進度 */
+  .progress{text-align:center;margin:2.5rem 0 3rem;}
+  .progress .count{font-family:var(--brush);font-size:2.4rem;color:var(--amber-glow);letter-spacing:.15em;text-shadow:0 0 24px rgba(232,168,92,.3);}
+  .progress .of{color:var(--moon-dim);font-size:1.1rem;}
+  .progress .bar{max-width:280px;height:2px;margin:1rem auto 0;background:rgba(216,205,180,.15);position:relative;}
+  .progress .bar i{position:absolute;left:0;top:0;height:100%;width:0;background:linear-gradient(90deg,var(--amber),var(--amber-glow));transition:width .8s cubic-bezier(.16,1,.3,1);box-shadow:0 0 12px rgba(232,168,92,.6);}
+
+  /* 信物格 */
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem;margin-bottom:3rem;}
+  .tok{border:1px solid rgba(216,205,180,.12);background:rgba(13,14,20,.5);padding:1.8rem 1rem 1.4rem;text-align:center;
+    position:relative;transition:.6s cubic-bezier(.16,1,.3,1);overflow:hidden;}
+  .tok .icon{width:64px;height:88px;margin:0 auto .9rem;color:var(--moon-dim);opacity:.32;transition:.7s;filter:grayscale(1);}
+  .tok .icon svg{width:100%;height:100%;}
+  .tok .tname{font-family:var(--brush);font-size:1.25rem;color:var(--moon-dim);letter-spacing:.1em;transition:.5s;}
+  .tok .tfrom{font-size:.72rem;color:#5a554b;margin-top:.5rem;line-height:1.7;letter-spacing:.05em;}
+  .tok .stamp{position:absolute;top:.8rem;right:.8rem;font-family:var(--brush);font-size:.9rem;color:var(--blood);
+    border:1px solid var(--blood);border-radius:50%;width:2rem;height:2rem;display:flex;align-items:center;justify-content:center;
+    transform:rotate(-12deg) scale(0);transition:.5s cubic-bezier(.34,1.56,.64,1);opacity:0;}
+  /* 點亮 */
+  .tok.on{border-color:rgba(232,168,92,.5);background:linear-gradient(165deg, rgba(28,20,14,.9), rgba(13,14,20,.9));box-shadow:0 0 30px rgba(196,97,42,.18);}
+  .tok.on .icon{color:var(--amber-glow);opacity:1;filter:none;text-shadow:0 0 20px rgba(232,168,92,.5);}
+  .tok.on .tname{color:var(--amber-glow);}
+  .tok.on .stamp{transform:rotate(-12deg) scale(1);opacity:1;}
+  @keyframes pop{0%{transform:scale(1);}40%{transform:scale(1.07);}100%{transform:scale(1);}}
+  .tok.just{animation:pop .7s;}
+
+  /* 兌換 */
+  .redeem{max-width:460px;margin:0 auto;text-align:center;}
+  .redeem label{font-family:var(--brush);font-size:1.2rem;color:var(--moon);letter-spacing:.15em;display:block;margin-bottom:.4rem;}
+  .redeem .hint{font-size:13px;color:var(--moon-dim);margin-bottom:1rem;line-height:1.8;}
+  .redeem .in-row{display:flex;gap:.7rem;}
+  .redeem input{flex:1;background:rgba(7,8,12,.8);border:1px solid rgba(216,205,180,.22);color:var(--moon);
+    font-family:var(--mincho);font-size:1.05rem;letter-spacing:.15em;padding:.85rem 1rem;text-align:center;outline:none;transition:.4s;}
+  .redeem input:focus{border-color:var(--amber-glow);box-shadow:0 0 22px rgba(232,168,92,.18);}
+  .redeem button{font-family:var(--brush);font-size:1.15rem;letter-spacing:.2em;color:var(--moon);background:rgba(10,11,16,.6);
+    border:1px solid rgba(232,168,92,.4);padding:.85rem 1.6rem;cursor:pointer;transition:.5s;}
+  .redeem button:hover{border-color:var(--amber-glow);color:var(--amber-glow);letter-spacing:.3em;box-shadow:0 0 24px rgba(232,168,92,.2);}
+  .fb{margin-top:1rem;min-height:1.4em;font-size:.95rem;letter-spacing:.05em;}
+  .fb.bad{color:var(--blood);} .fb.good{color:var(--amber-glow);}
+
+  /* 緣者解鎖 */
+  .enroll{margin-top:3rem;border:1px solid var(--amber);background:radial-gradient(ellipse at 50% 0%, rgba(196,97,42,.12), rgba(13,14,20,.6));
+    padding:2.6rem 2rem;text-align:center;opacity:0;max-height:0;overflow:hidden;transition:opacity .9s, max-height .9s;}
+  .enroll.show{opacity:1;max-height:600px;}
+  .enroll .e-mark{font-family:var(--brush);font-size:2.6rem;color:var(--amber-glow);letter-spacing:.25em;text-shadow:0 0 30px rgba(232,168,92,.4);}
+  .enroll .e-sub{font-size:.7rem;letter-spacing:.5em;color:var(--amber);text-transform:uppercase;margin:.8rem 0 1.6rem;}
+  .enroll p{color:var(--moon-dim);line-height:2.3;font-size:15px;max-width:520px;margin:0 auto;}
+  .enroll p .em{color:var(--moon);}
+
+  @media(max-width:760px){
+    nav.bar{padding:.9rem 1.3rem;} nav.bar .toggle{display:block;}
+    nav.bar .links{position:absolute;top:100%;right:1.3rem;flex-direction:column;gap:1.1rem;background:rgba(8,9,13,.97);
+      border:1px solid rgba(216,205,180,.12);padding:1.4rem 2rem;display:none;align-items:flex-end;}
+    nav.bar .links.open{display:flex;}
+    .grid{grid-template-columns:repeat(2,1fr);}
+    .redeem .in-row{flex-direction:column;}
+  }
+</style>
+</head>
+<body>
+
+<nav class="bar">
+  <a href="index.html" class="home">逢魔</a>
+  <button class="toggle" onclick="document.querySelector('.links').classList.toggle('open')">≡ 品書</button>
+  <div class="links">
+    <a href="seats.html">三席</a>
+    <a href="menu.html">食單</a>
+    <a href="staff.html">奉公人</a>
+    <a href="rules.html">作法</a>
+    <a href="ema.html">繪馬牆</a>
+    <a href="door.html">推開門</a>
+  </div>
+</nav>
+
+<div class="page">
+  <div class="head">
+    <div class="mark">信物帳</div>
+    <div class="en">Keepsakes</div>
+    <p class="lead">每解開一次今月の怪、每參與一場特別的夜，<br>你都會得到一枚信物。集齊三枚，便可升格為「緣者」。</p>
+  </div>
+
+  <div class="progress">
+    <span class="count" id="count">0</span><span class="of"> / 3</span>
+    <div class="bar"><i id="bar"></i></div>
+  </div>
+
+  <div class="grid" id="grid"></div>
+
+  <div class="redeem">
+    <label>呈上信物</label>
+    <div class="hint">輸入信物的合言葉（解謎或活動時取得），對應的信物便會點亮。</div>
+    <div class="in-row">
+      <input type="text" id="code" placeholder="輸入合言葉" autocomplete="off">
+      <button id="go">呈　上</button>
+    </div>
+    <div class="fb" id="fb"></div>
+  </div>
+
+  <div class="enroll" id="enroll">
+    <div class="e-mark">緣者</div>
+    <div class="e-sub">You are now one of us</div>
+    <p>你已集齊三枚信物。<br><span class="em">請將信物交給任一位妖怪。</span><br>閻羅會記住所有升格的緣者——<br>從今往後，那最深的一席「逢魔席」，將為你保留。</p>
+  </div>
+</div>
+
+<script>
+/* ╔══════════════════════════════════════════════════════════════╗
+   ║                信 物 設 定（改這裡）                        ║
+   ║                                                            ║
+   ║  每枚信物：name 名稱 / from 從何取得 / code 合言葉           ║
+   ║  合言葉就是你在解謎或活動發給客人的暗號，輸入正確即點亮。     ║
+   ║  NEED = 升格緣者需要的數量（預設 3）                         ║
+   ╚══════════════════════════════════════════════════════════════╝ */
+
+const NEED = 3;
+
+const TOKENS = [
+  { id:"fu",   name:"初符",      from:"解開首次「今月の怪」", code:"はじまり",
+    icon:`<svg viewBox="0 0 40 60"><rect x="12" y="4" width="16" height="52" rx="1" fill="none" stroke="currentColor" stroke-width="2"/><line x1="20" y1="13" x2="20" y2="47" stroke="currentColor" stroke-width="1.5"/></svg>` },
+  { id:"hi",   name:"百物語の燭", from:"參與一場百物語",       code:"ひゃく",
+    icon:`<svg viewBox="0 0 40 60"><rect x="14" y="22" width="12" height="32" fill="none" stroke="currentColor" stroke-width="2"/><path d="M20 22 C16 16 24 14 20 7 C21 14 24 17 20 22 Z" fill="currentColor"/></svg>` },
+  { id:"su",   name:"緣の鈴",    from:"連續三場入座",         code:"すず",
+    icon:`<svg viewBox="0 0 40 60"><path d="M11 42 C11 27 14 20 20 18 C26 20 29 27 29 42 Z" fill="none" stroke="currentColor" stroke-width="2"/><line x1="7" y1="42" x2="33" y2="42" stroke="currentColor" stroke-width="2"/><circle cx="20" cy="47" r="3" fill="currentColor"/><line x1="20" y1="18" x2="20" y2="12" stroke="currentColor" stroke-width="2"/></svg>` },
+  { id:"na",   name:"忘川の雫",  from:"飲盡一杯「忘川」",      code:"なみだ",
+    icon:`<svg viewBox="0 0 40 60"><path d="M20 12 C12 26 12 38 20 44 C28 38 28 26 20 12 Z" fill="currentColor"/></svg>` },
+  { id:"ka",   name:"逢魔の鍵",  from:"通關一次全沉浸場",      code:"かぎ",
+    icon:`<svg viewBox="0 0 40 60"><circle cx="20" cy="18" r="9" fill="none" stroke="currentColor" stroke-width="2.5"/><line x1="20" y1="27" x2="20" y2="50" stroke="currentColor" stroke-width="2.5"/><line x1="20" y1="42" x2="27" y2="42" stroke="currentColor" stroke-width="2.5"/><line x1="20" y1="48" x2="26" y2="48" stroke="currentColor" stroke-width="2.5"/></svg>` },
+  { id:"tsu",  name:"椿の印",    from:"特別之夜的限定信物",    code:"つばき",
+    icon:`<svg viewBox="0 0 40 60"><g fill="currentColor"><circle cx="20" cy="22" r="6"/><circle cx="13" cy="28" r="5"/><circle cx="27" cy="28" r="5"/><circle cx="16" cy="36" r="5"/><circle cx="24" cy="36" r="5"/></g><circle cx="20" cy="29" r="3.5" fill="#0c0d13"/></svg>` }
+];
+
+/* ── 以下為引擎，不用動 ── */
+const grid = document.getElementById('grid');
+const unlocked = new Set();        // 記憶體版（重整會歸零）
+const norm = s => (s||"").trim().toLowerCase().replace(/[\s・·]/g,'');
+
+TOKENS.forEach(t=>{
+  const d = document.createElement('div');
+  d.className = 'tok'; d.id = 'tok-'+t.id;
+  d.innerHTML = `<div class="icon">${t.icon}</div>
+                 <div class="tname">${t.name}</div>
+                 <div class="tfrom">${t.from}</div>
+                 <div class="stamp">得</div>`;
+  grid.appendChild(d);
+});
+
+function refresh(just){
+  const n = unlocked.size;
+  document.getElementById('count').textContent = n;
+  document.getElementById('bar').style.width = Math.min(100, n/NEED*100) + '%';
+  if(just){
+    const el = document.getElementById('tok-'+just);
+    el.classList.add('on'); el.classList.add('just');
+    setTimeout(()=>el.classList.remove('just'), 700);
+  }
+  if(n >= NEED) document.getElementById('enroll').classList.add('show');
+}
+
+function redeem(){
+  const fb = document.getElementById('fb');
+  const v = norm(document.getElementById('code').value);
+  if(!v){ fb.className='fb bad'; fb.textContent='請輸入合言葉。'; return; }
+  const t = TOKENS.find(t=>norm(t.code)===v);
+  if(!t){ fb.className='fb bad'; fb.textContent='這不是任何信物的合言葉。'; return; }
+  if(unlocked.has(t.id)){ fb.className='fb bad'; fb.textContent='「'+t.name+'」你已經有了。'; return; }
+  unlocked.add(t.id);
+  fb.className='fb good'; fb.textContent='得到了信物：'+t.name+'。';
+  document.getElementById('code').value='';
+  refresh(t.id);
+}
+
+document.getElementById('go').onclick = redeem;
+document.getElementById('code').addEventListener('keydown', e=>{ if(e.key==='Enter') redeem(); });
+refresh();
+
+/* 想讓信物在同一台裝置「記住」嗎？部署到自己的網站後，可改用 localStorage：
+   讀取： const saved = JSON.parse(localStorage.getItem('omagatoki_tokens')||'[]'); saved.forEach(id=>unlocked.add(id));
+   存檔： 在 unlocked.add(t.id) 之後加 localStorage.setItem('omagatoki_tokens', JSON.stringify([...unlocked]));
+   （在這個預覽視窗無法使用 localStorage，故預設為記憶體版。） */
+</script>
+</body>
+</html>
