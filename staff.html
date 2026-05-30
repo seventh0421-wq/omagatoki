@@ -245,7 +245,7 @@ function eerie(text){
 STAFF.forEach((s, i)=>{
   const b = document.createElement('button');
   b.className = 'name' + (i===0?' on':'');
-  b.innerHTML = `<span class="nm">${s.name}</span><span class="rl">${s.role}</span>`;
+  b.innerHTML = `<span class="nm">${s.name}</span>` + (s.name==='閻羅' ? `<span class="rl">${s.role}</span>` : '');
   b.onclick = ()=>select(i);
   listEl.appendChild(b);
 });
@@ -269,7 +269,7 @@ function select(i){
     <div class="panel">
       <div class="photo">${photo}</div>
       <div class="info">
-        <div class="role">${s.role}</div>
+        ${s.name==='閻羅' ? '<div class="role">'+s.role+'</div>' : ''}
         <div class="yname">${s.name}</div>
         <div class="rule">
           <div class="rl-label">規矩</div>
