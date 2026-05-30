@@ -4,6 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>緣起書 ── 逢魔</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+  <link rel="icon" type="image/png" sizes="64x64" href="favicon.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Yuji+Syuku&family=Shippori+Mincho+B1:wght@400;500;600;700&family=Klee+One:wght@400;600&display=swap" rel="stylesheet">
@@ -185,6 +189,13 @@
         </select>
       </div>
       <div class="nom-cost" id="nomCost">預估指名費用　<span id="nomCostVal">0 GIL</span></div>
+      <div class="desc" style="margin-top:.8rem;">每位妖怪同一時段至多陪伴兩位客人；若你心儀的妖怪已滿，接待會為你安排其他時段或妖怪。</div>
+    </div>
+
+    <div class="field">
+      <label>同行的客<span class="req">可留白</span></label>
+      <div class="desc">若有同行者，請寫下他們的角色名與伺服器；想各自指名不同妖怪，也一併註明。<br>例：小明＠鳳凰（指名 雪女・一節）、小華＠奧汀（指名 狐妖・兩節）</div>
+      <textarea id="party-list" placeholder="角色名＠伺服器（指名 妖怪・節數）……每位一行，或以、分隔"></textarea>
     </div>
 
     <div class="field">
@@ -257,6 +268,7 @@ document.getElementById('submitBtn').onclick = async ()=>{
     nomStaff: document.getElementById('nomStaff').value || "（不指定）",
     nomSessions: sess,
     nomCost: sess * PRICE_PER_SESSION,
+    companions: val('party-list') || "（無）",
     topic: val('topic') || "（未填）"
   };
 
@@ -280,6 +292,7 @@ document.getElementById('submitBtn').onclick = async ()=>{
             { name:"指名", value:data.nomStaff, inline:true },
             { name:"節數", value:(data.nomSessions ? data.nomSessions+" 節" : "（未定）"), inline:true },
             { name:"預估指名費", value:data.nomCost.toLocaleString("en-US")+" GIL", inline:true },
+            { name:"同行的客", value:data.companions, inline:false },
             { name:"💬 內緒話（給店員接待用）", value:data.topic, inline:false }
           ],
           footer:{ text:"逢魔 ── おうまがとき" },
