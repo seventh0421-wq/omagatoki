@@ -68,12 +68,29 @@
   .panel{display:grid;grid-template-columns:400px 1fr;gap:2.5rem;align-items:start;animation:detin .7s cubic-bezier(.16,1,.3,1);}
   @keyframes detin{from{opacity:0;transform:translateY(20px);filter:blur(5px);}to{opacity:1;transform:none;filter:none;}}
 
-  .photo{position:relative;aspect-ratio:3/4;border:1px solid rgba(216,205,180,.18);overflow:hidden;
-    box-shadow:0 30px 70px rgba(0,0,0,.55);background:#0c0d13;}
-  .photo img{width:100%;height:100%;object-fit:cover;object-position:50% 18%;display:block;}
-  .photo::after{content:"";position:absolute;inset:0;pointer-events:none;
-    background:radial-gradient(ellipse at 50% 120%, rgba(196,97,42,.18), transparent 55%),
-              linear-gradient(180deg, transparent 60%, rgba(0,0,0,.4));}
+  /* 和風捲軸（掛軸）框 */
+  .photo-frame{position:relative;margin:22px 12px;padding:0;}
+  .photo-frame .rod{position:absolute;left:-14px;right:-14px;height:20px;z-index:4;pointer-events:none;
+    background:linear-gradient(180deg,#6a4e2c,#3a2a18 50%,#1a130b);border-radius:10px;box-shadow:0 4px 12px rgba(0,0,0,.55);}
+  .photo-frame .rod.top{top:-12px;}
+  .photo-frame .rod.bot{bottom:-12px;}
+  .photo-frame .rod::before,.photo-frame .rod::after{content:"";position:absolute;top:50%;width:13px;height:30px;border-radius:5px;
+    transform:translateY(-50%);background:radial-gradient(circle at 40% 32%,#7a5c34,#241a10);box-shadow:0 2px 8px rgba(0,0,0,.55),inset 0 0 4px rgba(0,0,0,.4);}
+  .photo-frame .rod::before{left:-9px;}
+  .photo-frame .rod::after{right:-9px;}
+  .photo-frame .mount{position:relative;padding:14px;background:linear-gradient(160deg,#3a2c1a,#241a10);
+    box-shadow:inset 0 0 0 1px rgba(196,97,42,.45), inset 0 0 20px rgba(0,0,0,.5);}
+  .photo{position:relative;aspect-ratio:3/4;border:1px solid rgba(232,168,92,.25);overflow:hidden;background:#0c0d13;}
+  .photo img{width:100%;height:100%;object-fit:cover;object-position:50% 18%;display:block;
+    animation:emerge 1.3s cubic-bezier(.16,1,.3,1);}
+  @keyframes emerge{from{opacity:0;filter:blur(12px) brightness(.45);transform:scale(1.06);}to{opacity:1;filter:none;transform:none;}}
+  /* 氛圍疊加：顆粒 + 暗角 */
+  .photo::before{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;opacity:.07;mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+  .photo::after{content:"";position:absolute;inset:0;z-index:3;pointer-events:none;
+    background:radial-gradient(ellipse at 50% 120%, rgba(196,97,42,.2), transparent 55%),
+              radial-gradient(ellipse at 50% 50%, transparent 55%, rgba(0,0,0,.45) 100%),
+              linear-gradient(180deg, transparent 58%, rgba(0,0,0,.45));}
   .photo-ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
     background:repeating-linear-gradient(45deg,#0e0f16,#0e0f16 12px,#0c0d13 12px,#0c0d13 24px);text-align:center;padding:1.5rem;}
   .photo-ph .big{font-family:var(--brush);font-size:5rem;color:rgba(232,168,92,.25);line-height:1;text-shadow:0 0 30px rgba(232,168,92,.15);}
@@ -116,7 +133,7 @@
     .name:hover,.name.on{padding-left:.8rem;border-left:none;border-bottom-color:var(--amber);background:none;}
     .name .rl{display:none;}
     .panel{grid-template-columns:1fr;}
-    .photo{max-width:380px;margin:0 auto;}
+    .photo-frame{max-width:404px;margin:0 auto;}
   }
 </style>
 </head>
@@ -272,7 +289,7 @@ function select(i){
 
   detailEl.innerHTML = `
     <div class="panel">
-      <div class="photo">${photo}</div>
+      <div class="photo-frame"><div class="rod top"></div><div class="mount"><div class="photo">${photo}</div></div><div class="rod bot"></div></div>
       <div class="info">
         ${s.name==='閻羅' ? '<div class="role">'+s.role+'</div>' : ''}
         <div class="yname">${s.name}</div>
