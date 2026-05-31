@@ -8,9 +8,281 @@
   <link rel="icon" type="image/png" sizes="64x64" href="favicon.png">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
 
-<link rel="stylesheet" href="styles.css">
+<style>
+/* ════════════════════════════════════════
+   逢魔 ── おうまがとき　共用樣式
+   ════════════════════════════════════════ */
+@import url('https://fonts.googleapis.com/css2?family=Yuji+Syuku&family=Shippori+Mincho+B1:wght@400;500;600;700&family=Klee+One:wght@400;600&display=swap');
+
+:root{
+  --night:#0a0b10;
+  --night-2:#101119;
+  --ink:#05060a;
+  --amber:#c4612a;
+  --amber-soft:#d98b4a;
+  --amber-glow:#e8a85c;
+  --blood:#7a2018;
+  --moon:#e8e3d6;
+  --moon-dim:#9a9488;
+  --paper:#d8cdb4;
+  --paper-dark:#b8a988;
+  --brush:'Yuji Syuku', serif;
+  --mincho:'Shippori Mincho B1', serif;
+  --hand:'Klee One', serif;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+
+body{
+  background:var(--night);
+  color:var(--moon);
+  font-family:var(--mincho);
+  overflow-x:hidden;
+  line-height:1.9;
+  letter-spacing:.04em;
+  position:relative;
+  min-height:100vh;
+}
+
+/* 顆粒雜訊 */
+body::before{
+  content:"";position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode:overlay;
+}
+/* 暈影 */
+body::after{
+  content:"";position:fixed;inset:0;z-index:9998;pointer-events:none;
+  background:radial-gradient(ellipse at center, transparent 42%, rgba(0,0,0,.55) 100%);
+}
+::selection{background:var(--blood);color:var(--moon);}
+
+/* ════ 導覽列 ════ */
+nav.bar{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1rem 2rem;
+  background:linear-gradient(180deg, rgba(7,8,12,.92), rgba(7,8,12,0));
+  backdrop-filter:blur(4px);
+}
+nav.bar .home{
+  font-family:var(--brush);font-size:1.9rem;color:var(--moon);
+  text-decoration:none;letter-spacing:.15em;
+  text-shadow:0 0 18px rgba(232,168,92,.3);
+  transition:.4s;
+}
+nav.bar .home:hover{color:var(--amber-glow);}
+nav.bar .links{display:flex;gap:1.7rem;flex-wrap:wrap;}
+nav.bar .links a{
+  font-family:var(--brush);font-size:1.05rem;color:var(--moon-dim);
+  text-decoration:none;letter-spacing:.18em;position:relative;
+  transition:.4s;padding-bottom:.2rem;
+}
+nav.bar .links a::after{
+  content:"";position:absolute;left:0;bottom:-2px;width:0;height:1px;
+  background:var(--amber-glow);transition:.4s;
+}
+nav.bar .links a:hover{color:var(--moon);}
+nav.bar .links a:hover::after{width:100%;}
+nav.bar .links a.active{color:var(--amber-glow);}
+nav.bar .links a.active::after{width:100%;background:var(--amber);}
+
+/* 漢堡（手機） */
+nav.bar .toggle{display:none;background:none;border:none;color:var(--moon);
+  font-family:var(--brush);font-size:1.3rem;cursor:pointer;letter-spacing:.1em;}
+
+/* ════ 頁面共用 ════ */
+.page{padding:9rem 1.5rem 6rem;min-height:100vh;position:relative;}
+.wrap{max-width:1040px;margin:0 auto;}
+
+.page-head{text-align:center;margin-bottom:4.5rem;}
+.page-mark{
+  font-family:var(--brush);font-size:clamp(2.8rem,8vw,5rem);
+  color:var(--moon);letter-spacing:.18em;line-height:1.1;
+  text-shadow:0 0 28px rgba(232,168,92,.2);
+}
+.page-en{font-size:.72rem;letter-spacing:.5em;color:var(--amber);
+  text-transform:uppercase;margin-top:1rem;display:block;}
+.page-lead{color:var(--moon-dim);max-width:560px;margin:1.6rem auto 0;
+  font-size:.98rem;line-height:2.2;}
+
+/* 進場淡入 */
+.reveal{opacity:0;transform:translateY(30px);
+  transition:opacity 1.1s ease, transform 1.1s cubic-bezier(.16,1,.3,1);}
+.reveal.in{opacity:1;transform:translateY(0);}
+
+.divider{width:1px;height:60px;margin:3rem auto;
+  background:linear-gradient(180deg,transparent,var(--amber),transparent);}
+
+/* ════ 頁尾 ════ */
+footer{background:#05060a;text-align:center;padding:3rem 1.5rem;
+  border-top:1px solid rgba(216,205,180,.08);}
+footer .fmark{font-family:var(--brush);font-size:1.6rem;color:var(--moon-dim);letter-spacing:.3em;}
+footer .fsub{font-size:.68rem;color:#4a463e;letter-spacing:.3em;margin-top:.9rem;line-height:2;}
+footer .fnav{margin-top:1.4rem;display:flex;gap:1.2rem;justify-content:center;flex-wrap:wrap;}
+footer .fnav a{font-family:var(--brush);font-size:.9rem;color:#5a554b;text-decoration:none;transition:.3s;letter-spacing:.1em;}
+footer .fnav a:hover{color:var(--amber-soft);}
+
+/* ════ 提灯背景元件 ════ */
+.lantern{position:absolute;border-radius:50%;filter:blur(45px);
+  background:radial-gradient(circle, rgba(232,168,92,.45), transparent 70%);
+  animation:flicker 4s infinite ease-in-out;pointer-events:none;z-index:0;}
+@keyframes flicker{
+  0%,100%{opacity:.5;transform:scale(1);}
+  25%{opacity:.32;transform:scale(.97);}
+  50%{opacity:.65;transform:scale(1.03);}
+  72%{opacity:.26;transform:scale(.95);}
+  80%{opacity:.55;transform:scale(1);}
+}
+
+/* ════════ index / Hero ════════ */
+.hero{
+  height:100vh;min-height:680px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;position:relative;overflow:hidden;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 115%, rgba(196,97,42,.28), transparent 60%),
+    radial-gradient(ellipse 60% 40% at 50% 120%, rgba(122,32,24,.25), transparent 70%),
+    linear-gradient(180deg, #07080c 0%, #0c0d15 55%, #15110f 100%);
+}
+.torii-line{position:absolute;top:0;left:50%;width:1px;height:100%;
+  background:linear-gradient(180deg, transparent, rgba(216,205,180,.15) 30%, rgba(216,205,180,.15) 70%, transparent);
+  transform:translateX(-50%);}
+.hero-title{
+  writing-mode:vertical-rl;font-family:var(--brush);
+  font-size:clamp(5.5rem, 16vw, 12rem);color:var(--moon);line-height:1;letter-spacing:.1em;
+  text-shadow:0 0 30px rgba(232,168,92,.25), 0 0 4px rgba(0,0,0,.8);
+  position:relative;z-index:3;opacity:0;
+  animation:titleIn 2.4s .3s forwards cubic-bezier(.16,1,.3,1);}
+@keyframes titleIn{
+  0%{opacity:0;transform:translateY(40px);filter:blur(12px);}
+  100%{opacity:1;transform:translateY(0);filter:blur(0);}}
+.hero-sub{font-family:var(--brush);font-size:clamp(.85rem,2vw,1.1rem);
+  color:var(--amber-glow);letter-spacing:1em;margin-top:2.4rem;padding-left:1em;
+  opacity:0;animation:fadeUp 2s 1.6s forwards;z-index:3;}
+.hero-whisper{position:absolute;bottom:11%;text-align:center;color:var(--moon-dim);
+  font-size:clamp(.78rem,1.6vw,.95rem);letter-spacing:.25em;line-height:2.4;
+  opacity:0;animation:fadeUp 2.4s 2.4s forwards;z-index:3;}
+.hero-whisper .glitch-name{color:var(--amber-soft);font-weight:600;transition:opacity .25s;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+.enter-hint{position:absolute;bottom:3.5%;left:50%;transform:translateX(-50%);
+  font-family:var(--brush);font-size:.95rem;letter-spacing:.4em;color:var(--moon-dim);
+  writing-mode:vertical-rl;text-decoration:none;opacity:0;
+  animation:fadeUp 2s 3.2s forwards, bob 2.6s 3.2s infinite ease-in-out;transition:color .4s;z-index:3;}
+.enter-hint:hover{color:var(--amber-glow);}
+@keyframes bob{0%,100%{transform:translateX(-50%) translateY(0);}50%{transform:translateX(-50%) translateY(10px);}}
+
+/* index 序章 */
+.intro{background:linear-gradient(180deg,#15110f,#0c0d13);text-align:center;padding:7rem 1.5rem;}
+.intro p{max-width:640px;margin:0 auto 1.6rem;font-size:clamp(1rem,2.4vw,1.2rem);color:var(--moon);line-height:2.4;}
+.intro .em{color:var(--amber-glow);font-weight:600;}
+
+/* ════════ 三席 ════════ */
+.seat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem;}
+.seat{border:1px solid rgba(216,205,180,.14);
+  background:linear-gradient(160deg, rgba(21,22,30,.9), rgba(10,11,16,.9));
+  padding:2.6rem 1.7rem;position:relative;transition:.5s;overflow:hidden;}
+.seat::before{content:"";position:absolute;inset:0;
+  background:radial-gradient(circle at 50% 120%, rgba(196,97,42,.2), transparent 60%);
+  opacity:0;transition:.6s;}
+.seat:hover{border-color:rgba(232,168,92,.5);transform:translateY(-6px);}
+.seat:hover::before{opacity:1;}
+.seat .jp{font-family:var(--brush);font-size:2rem;color:var(--amber-glow);letter-spacing:.1em;}
+.seat .lv{font-size:.68rem;letter-spacing:.3em;color:var(--moon-dim);margin:.9rem 0 1.3rem;text-transform:uppercase;}
+.seat p{font-size:.93rem;color:var(--moon-dim);line-height:2;}
+
+/* ════════ 食單 ════════ */
+.menu-group{margin-bottom:3.6rem;}
+.menu-group h3{font-family:var(--brush);font-size:1.6rem;color:var(--amber-soft);
+  letter-spacing:.2em;margin-bottom:1.6rem;border-bottom:1px solid rgba(216,205,180,.12);padding-bottom:.6rem;}
+.dish{display:flex;justify-content:space-between;align-items:baseline;gap:1.5rem;
+  padding:1.1rem 0;border-bottom:1px dotted rgba(216,205,180,.1);}
+.dish .name{font-size:1.1rem;color:var(--moon);font-weight:500;letter-spacing:.08em;flex-shrink:0;}
+.dish .desc{font-size:.86rem;color:var(--moon-dim);text-align:right;font-style:italic;line-height:1.7;}
+.menu-note{font-size:.8rem;color:var(--moon-dim);margin-top:2.5rem;text-align:center;letter-spacing:.15em;opacity:.7;}
+
+/* ════════ 店員 ════════ */
+.staff-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.2rem;}
+.yokai{border:1px solid rgba(216,205,180,.12);padding:2.2rem 1.6rem;position:relative;
+  background:rgba(13,14,20,.6);transition:.5s;}
+.yokai:hover{background:rgba(20,16,14,.9);border-color:var(--blood);}
+.yokai .role{font-size:.66rem;letter-spacing:.35em;color:var(--amber);text-transform:uppercase;}
+.yokai .yname{font-family:var(--brush);font-size:1.8rem;color:var(--moon);margin:.5rem 0 1rem;letter-spacing:.1em;}
+.yokai .rule{font-size:.86rem;color:var(--moon-dim);line-height:1.95;}
+.yokai .rule b{color:var(--amber-soft);font-weight:600;}
+
+/* ════════ 規則 ════════ */
+.rule-list{max-width:680px;margin:0 auto;}
+.rule-row{display:flex;gap:1.5rem;align-items:flex-start;padding:1.5rem 0;border-bottom:1px solid rgba(216,205,180,.1);}
+.rule-row .num{font-family:var(--brush);font-size:1.7rem;color:var(--amber);flex-shrink:0;width:1.6em;}
+.rule-row p{font-size:1rem;color:var(--moon);line-height:1.9;}
+.rule-row p span{color:var(--moon-dim);font-size:.85rem;display:block;margin-top:.4rem;}
+
+/* ════════ 繪馬牆 ════════ */
+.ema-rule{font-size:.9rem;color:var(--amber-soft);letter-spacing:.2em;text-align:center;margin-bottom:.5rem;}
+.ema-board{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:1.4rem;margin-top:2rem;}
+.ema-card{background:linear-gradient(160deg,#1a1410,#241a13);border:1px solid rgba(216,205,180,.15);
+  padding:1.5rem 1.1rem 1.3rem;font-family:var(--hand);color:var(--paper);position:relative;
+  transform:rotate(var(--rot));transition:.4s;box-shadow:0 6px 20px rgba(0,0,0,.4);}
+.ema-card::before{content:"";position:absolute;top:-7px;left:50%;transform:translateX(-50%);
+  width:8px;height:8px;border-radius:50%;background:var(--blood);}
+.ema-card::after{content:"";position:absolute;top:-22px;left:50%;transform:translateX(-50%);
+  width:1px;height:18px;background:rgba(216,205,180,.25);}
+.ema-card:hover{transform:rotate(0deg) scale(1.05);border-color:var(--amber);z-index:2;}
+.ema-card .txt{font-size:.95rem;line-height:1.75;}
+.ema-card .by{font-size:.66rem;color:var(--paper-dark);margin-top:.9rem;letter-spacing:.1em;}
+
+/* ════════ 推開門 ════════ */
+.door-wrap{text-align:center;
+  background:radial-gradient(ellipse 70% 50% at 50% 45%, rgba(196,97,42,.2), transparent 65%);}
+.door-wrap p{color:var(--moon-dim);max-width:520px;margin:0 auto 1rem;line-height:2.2;letter-spacing:.1em;}
+.clock{font-family:var(--brush);font-size:1.1rem;color:var(--blood);letter-spacing:.3em;margin:2rem 0;opacity:.85;}
+.door-btn{display:inline-block;margin-top:2.5rem;font-family:var(--brush);font-size:1.6rem;letter-spacing:.3em;
+  color:var(--moon);text-decoration:none;padding:1.3rem 3.5rem;border:1px solid rgba(232,168,92,.4);
+  position:relative;background:rgba(10,11,16,.5);transition:.6s cubic-bezier(.16,1,.3,1);overflow:hidden;}
+.door-btn::before{content:"";position:absolute;inset:0;
+  background:radial-gradient(circle at center, rgba(196,97,42,.4), transparent 70%);opacity:0;transition:.6s;}
+.door-btn:hover{border-color:var(--amber-glow);letter-spacing:.45em;color:var(--amber-glow);box-shadow:0 0 40px rgba(232,168,92,.3);}
+.door-btn:hover::before{opacity:1;}
+
+/* 預約步驟 */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem;margin:3rem 0;}
+.step{border:1px solid rgba(216,205,180,.12);padding:2rem 1.4rem;text-align:center;background:rgba(13,14,20,.5);}
+.step .sn{font-family:var(--brush);font-size:2.2rem;color:var(--amber);display:block;margin-bottom:.8rem;}
+.step h4{font-size:1rem;color:var(--moon);margin-bottom:.6rem;letter-spacing:.1em;}
+.step p{font-size:.84rem;color:var(--moon-dim);line-height:1.9;margin:0;}
+
+/* ════ RWD ════ */
+@media(max-width:820px){
+  nav.bar{padding:.9rem 1.3rem;}
+  nav.bar .toggle{display:block;}
+  nav.bar .links{
+    position:absolute;top:100%;right:1.3rem;flex-direction:column;gap:1.1rem;
+    background:rgba(8,9,13,.97);border:1px solid rgba(216,205,180,.12);
+    padding:1.4rem 2rem;display:none;align-items:flex-end;
+  }
+  nav.bar .links.open{display:flex;}
+  .seat-grid,.steps{grid-template-columns:1fr;}
+  .dish{flex-direction:column;gap:.3rem;}
+  .dish .desc{text-align:left;}
+  .page{padding:8rem 1.3rem 5rem;}
+}
+
+</style>
+<style>
+  /* 詭異時鐘 */
+  .omaclock{position:fixed;right:16px;bottom:14px;z-index:90;
+    font-family:'Shippori Mincho B1',monospace,serif;font-size:13.5px;letter-spacing:.12em;
+    color:var(--amber-glow,#e8a85c);text-shadow:0 0 10px rgba(232,168,92,.35);
+    background:rgba(7,8,12,.55);border:1px solid rgba(232,168,92,.3);
+    border-radius:4px;padding:.4rem .75rem;backdrop-filter:blur(3px);pointer-events:none;user-select:none;transition:color .2s;}
+  .omaclock.glitch{color:#ff4d3d;text-shadow:0 0 12px rgba(255,77,61,.7);animation:omaShake .15s steps(2) infinite;}
+  @keyframes omaShake{0%{transform:translate(0,0);}50%{transform:translate(-1px,1px);}100%{transform:translate(1px,0);}}
+  @media(max-width:600px){.omaclock{font-size:11px;right:10px;bottom:10px;}}
+</style>
 </head>
 <body>
+<div class="omaclock" id="omaclock" aria-hidden="true"><span id="omaclock-t">----  /  --  /  --　--:--:--</span></div>
 
 <nav class="bar">
   <a href="index.html" class="home">逢魔</a>
@@ -22,6 +294,7 @@
     <a href="service.html">饗應</a>
     <a href="rules.html">作法</a>
     <a href="ema.html">繪馬牆</a>
+    <a href="guide.html">案內</a>
     <a href="door.html">推開門</a>
   </div>
 </nav>
@@ -62,12 +335,75 @@
 <footer>
   <div class="fmark">逢魔</div>
   <div class="fnav">
-    <a href="seats.html">三席</a><a href="menu.html">食單</a><a href="staff.html">奉公人</a>
-    <a href="rules.html">作法</a><a href="ema.html">繪馬牆</a><a href="door.html">推開門</a>
+    <a href="seats.html">三席</a><a href="menu.html">食單</a><a href="staff.html">奉公人</a><a href="service.html">饗應</a>
+    <a href="rules.html">作法</a><a href="ema.html">繪馬牆</a><a href="guide.html">案內</a><a href="door.html">推開門</a>
   </div>
   <div class="fsub">營業時間 · 黃昏至天明　|　© おうまがとき ── 一個 FFXIV 沉浸式體驗 RP 店<br>（此為角色扮演娛樂，所有「妖怪」皆為虛構）</div>
 </footer>
 
-<script src="effects.js"></script>
+<script>
+// ════ 捲動淡入 ════
+const obs = new IntersectionObserver((entries)=>{
+  entries.forEach((e,i)=>{
+    if(e.isIntersecting){
+      setTimeout(()=>e.target.classList.add('in'), (i%4)*110);
+      obs.unobserve(e.target);
+    }
+  });
+},{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+// ════ Hero 低語的夢核抖動 ════
+const gn = document.querySelector('.glitch-name');
+if(gn){
+  const words = ['今晚','三十年前','明天','已經太遲'];
+  let gi = 0;
+  setInterval(()=>{
+    if(Math.random() > .7){
+      gi = (gi+1) % words.length;
+      gn.style.opacity = '0';
+      setTimeout(()=>{ gn.textContent = words[gi]; gn.style.opacity = '1'; }, 250);
+    }
+  }, 3800);
+}
+
+// ════ 標示當前分頁 ════
+const here = location.pathname.split('/').pop() || 'index.html';
+document.querySelectorAll('nav.bar .links a').forEach(a=>{
+  if(a.getAttribute('href') === here) a.classList.add('active');
+});
+
+</script>
+<script>
+// ════ 詭異時鐘 ════
+(function(){
+  var el=document.getElementById('omaclock'), tEl=document.getElementById('omaclock-t');
+  if(!el||!tEl) return;
+  function p(n){return String(n).padStart(2,'0');}
+  function yr(){return new Date().getFullYear();}
+  function real(){var d=new Date();return d.getFullYear()+' / '+p(d.getMonth()+1)+' / '+p(d.getDate())+'　'+p(d.getHours())+':'+p(d.getMinutes())+':'+p(d.getSeconds());}
+  var glitches=[
+    function(){return (1900+Math.floor(Math.random()*40))+' / '+p(1+Math.floor(Math.random()*12))+' / '+p(1+Math.floor(Math.random()*28))+'　'+p(Math.floor(Math.random()*24))+':'+p(Math.floor(Math.random()*60))+':'+p(Math.floor(Math.random()*60));},
+    function(){return yr()+' / 13 / '+p(1+Math.floor(Math.random()*28))+'　'+p(Math.floor(Math.random()*24))+':'+p(Math.floor(Math.random()*60))+':'+p(Math.floor(Math.random()*60));},
+    function(){return yr()+' / '+p(1+Math.floor(Math.random()*12))+' / 32　25:'+p(Math.floor(Math.random()*60))+':61';},
+    function(){return '逢魔時　丑三つ時';},
+    function(){return '----  /  --  /  --　--:--:--';}
+  ];
+  var glitching=false;
+  function tick(){ if(!glitching) tEl.textContent=real(); }
+  setInterval(tick,1000); tick();
+  function schedule(){
+    var wait=25000+Math.random()*30000;
+    setTimeout(function(){
+      glitching=true; el.classList.add('glitch');
+      tEl.textContent=glitches[Math.floor(Math.random()*glitches.length)]();
+      var flick=setInterval(function(){ tEl.textContent=glitches[Math.floor(Math.random()*glitches.length)](); },320);
+      var dur=1200+Math.random()*900;
+      setTimeout(function(){ clearInterval(flick); glitching=false; el.classList.remove('glitch'); tick(); schedule(); },dur);
+    },wait);
+  }
+  schedule();
+})();
+</script>
 </body>
 </html>
